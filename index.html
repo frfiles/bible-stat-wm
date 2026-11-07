@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1344, minimum-scale=0.1, user-scalable=yes">
+<title>La Bible de la Stat WM</title>
+<style>
+  :root{
+    --bg:#f6f1e3;
+    --card:#fffdf6;
+    --ink:#3a3128;
+    --ink2:#8a7f68;
+    --line:#e5dcc6;
+    --line2:#efe8d4;
+    --accent:#6e6b4e;
+    --accent2:#8e8b6b;
+    --green:#0a9000;
+    --red:#c22525;
+    --blue:#3a65ad;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, #efe6d0 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, #e8ddc4 0%, transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    padding:6px 10px 4px;
+    min-width:1334px;
+    font-size:12.5px;
+  }
+  .wrap{width:1322px;margin:0 auto}
+
+  .topbar{display:flex;align-items:center;gap:10px;margin-bottom:9px;white-space:nowrap;position:relative}
+  .topbar h1{font-size:25px;color:#55523a;display:flex;align-items:center;gap:10px;letter-spacing:.2px}
+  .infobtn.titleinfo{width:23px;height:23px;font-size:14px}
+  #creditPanel{
+    display:none;position:absolute;z-index:60;left:0;top:44px;
+    background:var(--card);border:2px solid var(--accent2);border-radius:11px;
+    padding:9px 13px;box-shadow:0 8px 26px rgba(60,50,25,.3);
+    font-size:11px;color:var(--ink);line-height:1.55;white-space:nowrap;
+  }
+  #creditPanel.open{display:block}
+  #creditPanel .legal{
+    white-space:normal;max-width:520px;margin-top:7px;padding-top:6px;border-top:1px dashed var(--line);
+    font-size:10.5px;color:#6b5a3e;line-height:1.45;
+  }
+  #creditPanel .legal summary{
+    cursor:pointer;font-size:11px;font-weight:700;color:var(--accent);text-decoration:underline;
+    list-style:none;display:inline-flex;align-items:center;gap:5px;
+  }
+  #creditPanel .legal summary::-webkit-details-marker{display:none}
+  #creditPanel .legal summary::before{content:"▸";text-decoration:none;display:inline-block;transition:transform .15s}
+  #creditPanel .legal[open] summary::before{transform:rotate(90deg)}
+  #creditPanel .legal ul{margin:5px 0 0 17px}
+  #creditPanel .legal li{margin:2px 0}
+  #creditPanel b{color:#5e5b40}
+  .layout{display:grid;grid-template-columns:148px 1fr;gap:10px;align-items:start}
+  .side{display:flex;flex-direction:column;gap:7px;position:sticky;top:8px}
+  .vtab{
+    border:2px solid var(--line);background:var(--card);color:var(--ink2);
+    padding:11px 11px;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;
+    font-family:inherit;transition:all .15s;text-align:left;
+    display:flex;align-items:center;gap:8px;line-height:1.25;
+    box-shadow:0 2px 6px rgba(90,70,40,.07);
+  }
+  .vtab .vic{font-size:16px;flex:none}
+  .vtab.active{
+    background:linear-gradient(135deg,var(--accent2),var(--accent));border-color:var(--accent);
+    color:#fff;box-shadow:0 3px 10px rgba(110,107,78,.35);
+  }
+  .btn{
+    border:none;background:#efe8d6;color:#6a5c48;font-weight:700;font-size:11px;
+    padding:7px 13px;border-radius:10px;cursor:pointer;white-space:nowrap;font-family:inherit;
+  }
+  .btn.main{background:linear-gradient(135deg,#79a74e,#4c8a28);color:#fff;font-size:12px;box-shadow:0 2px 8px rgba(76,138,40,.35)}
+
+  .zconf{display:none;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--red);white-space:nowrap}
+  .zconf.open{display:inline-flex}
+  .zbtn{
+    width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;
+    font-size:13px;font-weight:800;color:#fff;line-height:1;
+    display:inline-flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.25);font-family:inherit;
+  }
+  .zbtn.yes{background:linear-gradient(135deg,#79a74e,#4c8a28)}
+  .zbtn.no{background:linear-gradient(135deg,#d9534f,#b23b3b)}
+  .zbtn:hover{filter:brightness(1.12)}
+
+  table.paltab{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+  .paltab th{font-size:9.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;padding:3px 10px;border-bottom:2px solid var(--line);text-align:right}
+  .paltab th:nth-child(2){text-align:center}
+  .paltab td{padding:2.6px 10px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line2)}
+  .paltab td.pn{text-align:center;font-weight:800}
+  .paltab tr.l3 td:not(.lvg){background:#fdf6d3}
+  .paltab tr.l4 td:not(.lvg){background:#e3f2d6}
+  .paltab tr.l5 td:not(.lvg){background:#fffdf6}
+  .paltab td.lvg{
+    width:74px;text-align:center;font-weight:800;font-size:12.5px;border-bottom:3px solid var(--card);
+    border-radius:9px;color:#fff;text-shadow:0 1px 1px #0005;vertical-align:middle;
+  }
+  .paltab td.lvg.l3{background:linear-gradient(160deg,#e8c33a,#c9a41c)}
+  .paltab td.lvg.l4{background:linear-gradient(160deg,#79a74e,#4c8a28)}
+  .paltab td.lvg.l5{background:linear-gradient(160deg,#a8a585,#7c795c)}
+  .paltab tr.l3:nth-child(9) td,.paltab tr.l4:nth-child(16) td{border-bottom:2px solid var(--line)}
+
+  .expwrap{display:grid;grid-template-columns:265px minmax(0,1fr);gap:10px;align-items:start}
+  .lnav{
+    display:flex;align-items:center;gap:8px;width:100%;text-align:left;cursor:pointer;
+    border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;
+    padding:6px 9px;margin-bottom:5px;font-size:12px;font-weight:600;font-family:inherit;
+  }
+  .lnav:hover{border-color:var(--accent2)}
+  .lnav.on{background:linear-gradient(135deg,var(--accent2),var(--accent));border-color:var(--accent);color:#fff}
+  .ln{
+    flex:none;width:21px;height:21px;border-radius:50%;background:#efe8d6;color:#5e5b40;
+    display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;
+  }
+  .lnav.on .ln{background:#fff;color:var(--accent)}
+  .ln.big{width:28px;height:28px;font-size:14px;background:linear-gradient(135deg,#79a74e,#4c8a28);color:#fff;margin-right:9px}
+  .expbody{min-height:640px;display:flex;flex-direction:column}
+  .lesson{display:none;font-size:13px;line-height:1.55;color:var(--ink)}
+  .lesson.on{display:block}
+  .lesson h3{display:flex;align-items:center;font-size:17px;color:#55523a;margin-bottom:9px;padding-bottom:7px;border-bottom:2px solid var(--line2)}
+  .lesson p{margin:6px 0}
+  .lesson ul{margin:5px 0 6px 20px}
+  .lesson li{margin:2px 0}
+  .fx{
+    font-family:Consolas,'Courier New',monospace;font-size:12.5px;font-weight:600;
+    background:#f6f1e1;border-left:4px solid var(--accent2);border-radius:7px;
+    padding:6px 11px;margin:6px 0;color:#3f3c2a;
+  }
+  .ex{background:#e8f3dd;border-left:4px solid #4c8a28;border-radius:7px;padding:6px 11px;margin:8px 0;font-size:12.5px}
+  .tip{background:#fdf6d3;border-left:4px solid #d4af2a;border-radius:7px;padding:6px 11px;margin:9px 0 !important;font-size:12.5px}
+  .kF{color:#b23b3b;font-weight:700}.kC{color:#8a5a1e;font-weight:700}.kI{color:#3a65ad;font-weight:700}.kV{color:#c27a10;font-weight:700}
+  .cg{color:#2e7d4f;font-weight:700}.ccs{color:#7a4fb0;font-weight:700}
+  .lfoot{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;border-top:2px solid var(--line2)}
+  .lcount{font-size:11px;color:var(--ink2);font-weight:700}
+
+  .lvline{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:11.5px;color:var(--ink2);font-weight:600;margin:-3px 0 9px}
+  .lvchips{display:inline-flex;gap:4px}
+  .lvchips i,.lvt i{
+    font-style:normal;display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;border-radius:6px;font-size:12px;font-weight:800;color:#fff;
+    text-shadow:0 1px 1px #0005;box-shadow:0 1px 3px rgba(0,0,0,.18);
+  }
+  .c3{background:linear-gradient(160deg,#e8c33a,#c9a41c)}
+  .c4{background:linear-gradient(160deg,#79a74e,#4c8a28)}
+  .c5{background:linear-gradient(160deg,#a8a585,#7c795c)}
+  .lvchips i.off{background:#ece6d2;color:#bcb498;text-shadow:none;box-shadow:none;text-decoration:line-through}
+  .lvnote{font-weight:400;font-size:11px;display:inline-flex;align-items:center;gap:4px}
+  .lvt{display:inline-flex;gap:2px;vertical-align:middle;margin-left:3px}
+  .lvchips i,.lvt i{background:linear-gradient(160deg,#a8a585,#7c795c) !important}
+  .lvt i{width:15px;height:15px;font-size:9px;border-radius:4px;font-family:'Segoe UI',system-ui,sans-serif}
+
+  .live{margin-top:10px;background:#eef3fb;border:1.5px solid #b9cbe8;border-radius:10px;padding:7px 11px}
+  .livehead{font-size:12px;font-weight:800;color:#2f4f86;margin-bottom:4px}
+  .lc{font-family:Consolas,'Courier New',monospace;font-size:12px;color:#2a2f3a;padding:2px 0;border-bottom:1px dashed #d3ddef}
+  .lc:last-child{border-bottom:none}
+  .lc b{color:var(--green)}
+
+  .hideMAJ{display:none !important} /* Vie après MAJ quotidienne : masquée pour l'instant, conservée dans le fichier */
+
+  .page{display:none}
+  .page.active{display:block}
+
+  .cols{display:grid;grid-template-columns:330px 478px 330px;gap:12px;align-items:start}
+  .cols2{display:grid;grid-template-columns:530px 632px;gap:12px;align-items:start}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:7px 12px;margin-bottom:8px;box-shadow:0 2px 7px rgba(90,70,40,.08);
+    position:relative;
+  }
+  .card h2{
+    font-size:12.5px;color:#5e5b40;margin-bottom:5px;display:flex;align-items:center;gap:7px;
+    border-bottom:2px solid var(--line2);padding-bottom:4px;
+  }
+  .hint{font-size:10px;color:var(--ink2);margin-top:4px;line-height:1.35}
+
+  .sect{
+    font-size:10px;font-weight:800;color:#6e6b4e;text-transform:uppercase;letter-spacing:.4px;
+    margin:5px 0 2px;padding-top:4px;border-top:1px dashed var(--line);
+  }
+  .sect:first-of-type,.card > .sect:first-child{margin-top:0;border-top:none;padding-top:0}
+
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px 7px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:2px 7px}
+  .field{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .field label{font-size:9px;color:var(--ink2);font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden}
+  .field input{
+    border:1.5px solid var(--line);border-radius:8px;padding:2.5px 7px;font-size:12.5px;
+    background:#fff;color:var(--ink);width:100%;font-variant-numeric:tabular-nums;font-family:inherit;
+  }
+  .field input:focus{outline:none;border-color:var(--accent2)}
+  .field input:disabled{background:#f3edda;font-weight:700;color:var(--green)}
+
+  /* Encart Level (info principale) */
+  .lvlbox{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:linear-gradient(160deg,#fdf8e8,#f1e7cb);border:2px solid var(--line);
+    border-radius:11px;padding:2px 13px;margin-bottom:4px;box-shadow:0 2px 6px rgba(90,70,40,.08);
+  }
+  .lvlbox .lab{font-size:14px;font-weight:800;color:#5e5b40}
+  .lvlbox input.bigin{
+    width:118px;border:1.5px solid var(--line);border-radius:9px;padding:3px 8px;
+    font-size:21px;font-weight:800;text-align:center;color:var(--green);background:#fff;
+    font-family:inherit;font-variant-numeric:tabular-nums;
+  }
+  .lvlbox input.bigin:focus{outline:none;border-color:var(--accent2)}
+  .lvlseg{display:flex;gap:5px}
+  .lvlseg button{
+    width:44px;padding:3px 0;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;
+    font-size:19px;font-weight:800;color:var(--ink2);background:#fff;font-family:inherit;
+    font-variant-numeric:tabular-nums;transition:all .12s;
+  }
+  .lvlseg button.on{
+    background:linear-gradient(135deg,#79a74e,#4c8a28);border-color:#4c8a28;color:#fff;
+    box-shadow:0 2px 7px rgba(76,138,40,.4);
+  }
+
+  /* Stats d'entrée en lignes */
+  .sectflex{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .maxinfo{text-transform:none;letter-spacing:0;font-weight:600;color:var(--ink2);display:flex;align-items:center;gap:5px}
+  .maxinfo b{color:var(--green);font-size:12px}
+  .infobtn{
+    width:17px;height:17px;border-radius:50%;border:1.5px solid var(--accent2);background:#fff;
+    color:var(--accent);font-weight:800;font-size:11px;line-height:1;cursor:pointer;font-family:Georgia,serif;font-style:italic;
+    display:inline-flex;align-items:center;justify-content:center;padding:0;
+  }
+  .infobtn:hover{background:var(--accent2);color:#fff}
+  #palPanel{
+    display:none;position:absolute;z-index:50;left:10px;right:10px;top:60px;
+    background:var(--card);border:2px solid var(--accent2);border-radius:12px;
+    padding:10px 12px;box-shadow:0 8px 28px rgba(60,50,25,.35);
+  }
+  #palPanel.open{display:block}
+  #abPanel{
+    display:none;position:absolute;z-index:55;right:0;top:26px;
+    background:var(--card);border:2px solid var(--accent2);border-radius:10px;
+    padding:8px 11px;box-shadow:0 8px 24px rgba(60,50,25,.3);
+    font-size:10.5px;color:var(--ink);line-height:1.6;font-weight:400;white-space:normal;width:330px;text-align:left;
+  }
+  #abPanel.open{display:block}
+  .palhead{font-size:11.5px;font-weight:800;color:#5e5b40;margin-bottom:4px}
+  .palrule{font-size:10px;color:var(--ink2);line-height:1.4;margin-bottom:7px}
+  .palgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+  .palcell{
+    border:1px solid var(--line);border-radius:7px;padding:3px 2px;text-align:center;
+    font-size:9.5px;color:var(--ink2);background:#fbf7ec;
+  }
+  .palcell b{display:block;font-size:11px;color:var(--ink)}
+  .palcell.on{background:#e8f3dd;border-color:#4c8a28}
+  .palcell.on b{color:var(--green)}
+
+  .statline{display:grid;grid-template-columns:1fr 94px;gap:8px;align-items:center;padding:1.5px 0;border-bottom:1px solid var(--line2)}
+  .statline.tot{border-bottom:none}
+  .statline label{font-size:11.5px;font-weight:600;font-style:italic;color:#55523a;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .capwrap{position:relative;display:block}
+  .statline .capwrap input{width:100%;padding-right:30px}
+  .capmax{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums;pointer-events:none}
+  .maxlab{flex:none;text-align:right;margin-right:7px;font-size:11px;font-weight:400;color:var(--ink);text-transform:none;letter-spacing:0}
+
+  .statline input{
+    border:1.5px solid var(--line);border-radius:8px;padding:1.5px 7px;font-size:12px;text-align:right;
+    background:#fff;color:var(--ink);width:100%;font-variant-numeric:tabular-nums;font-family:inherit;
+  }
+  .statline input:focus{outline:none;border-color:var(--accent2)}
+  .statline input:disabled{background:#f3edda;font-weight:700;color:var(--green);border-style:dashed}
+  .ic{height:15px;width:auto;vertical-align:-3px;flex:none}
+
+  /* ----- Panneau Statistiques, format du jeu ----- */
+  .gwrap{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 0;align-items:start}
+  .gwrap .glist{border-left:1.5px dashed var(--line);padding-left:10px;margin-left:10px}
+  #gIndices .lab{font-style:normal}
+  #gIndices .row{justify-content:flex-end;gap:10px}
+  #gIndices .lab{text-align:right}
+  #gIndices .v{min-width:42px;text-align:right}
+  table.gstat{border-collapse:collapse;font-size:11px}
+  .gstat th{font-size:8.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;
+    font-weight:700;text-align:right;padding:0 6px 3px;border-bottom:1.5px solid var(--line2)}
+  .gstat th:first-child{text-align:left;padding-left:2px}
+  .gstat td{padding:4.5px 3px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line2);white-space:nowrap}
+  .gstat tr:last-child td{border-bottom:none}
+  .gstat td.nm{text-align:left;font-style:italic;font-weight:600;color:#55523a;white-space:nowrap;padding-left:2px}
+  .gstat td.gv{color:var(--green);font-weight:700}
+  .gstat tr.tot td{border-top:2px solid var(--line);font-weight:700}
+  .gstat tr.tot td.nm{font-style:italic}
+
+  .glist{font-size:11.5px}
+  .glist .row{display:flex;justify-content:space-between;align-items:baseline;padding:4.5px 2px;border-bottom:1px solid var(--line2);gap:8px}
+  .glist .row:last-child{border-bottom:none}
+  .glist .lab{font-style:italic;font-weight:600;color:#55523a;white-space:nowrap}
+  .glist .v{font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .glist .v.dim{color:var(--ink)}
+  .glist .v small{font-weight:600;color:var(--ink2);font-size:9.5px}
+
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .tile{
+    background:#fbf7ec;border:1px solid var(--line);border-radius:10px;padding:6px 10px;min-width:0;
+  }
+  .tile .lab{font-size:8.5px;color:var(--ink2);font-weight:700;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;overflow:hidden}
+  .tile .val{font-size:15px;font-weight:700;margin-top:1px;font-variant-numeric:tabular-nums;color:var(--green)}
+
+  .tilerow{display:flex;align-items:center;gap:6px;margin-top:2px}
+  .tilerow .niv{font-size:9px;color:var(--ink2);font-weight:700}
+  .tilerow input{
+    width:52px;border:1.5px solid var(--line);border-radius:7px;padding:2px 5px;font-size:12px;text-align:right;
+    background:#fff;color:var(--ink);font-variant-numeric:tabular-nums;font-family:inherit;
+  }
+  .tilerow input:focus{outline:none;border-color:var(--accent2)}
+  .tilerow .val{margin-left:auto;font-size:15px}
+
+  table.atk{width:100%;border-collapse:collapse;font-size:11.5px}
+  .atk th,.atk td{padding:3px 7px;text-align:right;font-variant-numeric:tabular-nums}
+  .atk th:first-child,.atk td:first-child{text-align:left}
+  .atk thead th{color:var(--ink2);font-size:9px;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--line)}
+  .atk tbody tr{border-bottom:1px solid var(--line2)}
+  .atk tbody tr:last-child{border-bottom:none}
+
+  /* Mode inverse */
+  .pctrow{display:grid;grid-template-columns:122px minmax(110px,215px) 104px;gap:10px;align-items:center;margin-bottom:11px}
+  .pctrow .nm{font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .pctrow input[type=range]{width:100%;accent-color:#4c8a28;height:22px;cursor:pointer}
+  .pctrow .unitwrap input{font-size:17px;font-weight:800;padding:3px 22px 3px 6px;border-radius:9px}
+  .pctrow .unitwrap .unit{font-size:12px}
+  .unitwrap{position:relative}
+  .unitwrap input{
+    border:1.5px solid var(--line);border-radius:8px;padding:1.5px 20px 1.5px 6px;font-size:12px;text-align:right;
+    width:100%;font-variant-numeric:tabular-nums;background:#fff;font-family:inherit;
+  }
+  .unitwrap input:focus{outline:none;border-color:var(--accent2)}
+  .unitwrap .unit{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:10.5px;color:var(--ink2);font-weight:700;pointer-events:none}
+
+  .sumbox{margin-top:8px;border-radius:11px;border:2px solid;padding:8px 12px;font-size:12.5px;font-weight:700;text-align:center}
+  .sumbox .big{font-size:16px}
+  .sumbox.ok{background:#e8f3dd;border-color:#4c8a28;color:#1d6a10}
+  .sumbox.bad{background:#fae3e3;border-color:#c22525;color:#a01515}
+  .sumbox .msg{display:block;font-size:10.5px;font-weight:600;margin-top:2px}
+  .sumbox .fix{font-size:10.5px;font-weight:700;cursor:pointer;color:#1d6a10;text-decoration:underline;background:none;border:none;font-family:inherit}
+  .sumbox.bad .fix{color:#a01515}
+
+  .result-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .rstat{
+    border:1px solid var(--line);border-radius:12px;padding:8px 5px;text-align:center;min-width:0;
+    background:linear-gradient(160deg,#fdfaf0,#efe7cf);box-shadow:0 2px 6px rgba(90,70,40,.1);
+  }
+  .rstat .nm{font-size:8.5px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow:hidden}
+  .rstat .v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--green)}
+  .rstat .p{font-size:8.5px;color:var(--ink2)}
+  #invResults.off{opacity:.35;pointer-events:none}
+  #invBlock{display:none;font-size:12px;font-weight:700;color:var(--red);margin-top:8px;text-align:center}
+
+  .switch{display:flex;gap:5px;background:#efe8d6;border-radius:999px;padding:3px;width:max-content;margin-bottom:8px}
+  .switch button{border:none;background:transparent;padding:5px 12px;border-radius:999px;font-size:10.5px;font-weight:700;color:var(--ink2);cursor:pointer;white-space:nowrap;font-family:inherit}
+  .switch button.on{background:#fff;color:#5e5b40;box-shadow:0 1px 4px rgba(0,0,0,.14)}
+
+  footer{text-align:center;color:var(--ink2);font-size:9.5px;margin-top:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1><img src="data:image/png;base64,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" alt="" style="height:34px;width:auto;border-radius:8px"> La Bible de la Stat WM</h1>
+    <button type="button" class="infobtn titleinfo" id="infoCredit" title="Crédits">i</button>
+    <div id="creditPanel">
+      D'après le simulateur de stats par <b>Moukiny</b> - version du 02/07/2010<br>
+      &amp; le fichier stats et matos par <b>Jericho</b> - version du 08/08/2011<br>
+      Remise en page, abaques &amp; tutoriels par <b>Jericho</b> - version du 07/11/2026
+      <details class="legal">
+        <summary>Conditions d'utilisation de l'outil</summary>
+        <ul>
+          <li>Outil de compréhension non officiel des statistiques du jeu Woshu Moshu, sans lien direct avec le jeu ni avec ses ayants droit.</li>
+          <li>Fourni gratuitement, à titre informatif et pour un usage personnel uniquement.</li>
+          <li>Merci de ne pas réintégrer ce fichier, en tout ou partie, dans un jeu ou un système de jeu fonctionnel.</li>
+          <li>Toute réutilisation se fait sous la seule responsabilité de la personne qui l'effectue.</li>
+        </ul>
+      </details>
+    </div>
+    <span style="margin-left:auto;display:inline-flex;align-items:center;gap:8px">
+      <button class="btn" id="btn-zero">⌫ Tout remettre à zéro</button>
+      <span id="zeroConfirm" class="zconf">Êtes-vous sûr&nbsp;?
+        <button type="button" class="zbtn yes" id="zeroYes" title="Oui, tout remettre à zéro">✔</button>
+        <button type="button" class="zbtn no" id="zeroNo" title="Annuler">✖</button>
+      </span>
+    </span>
+  </div>
+
+  <div class="layout">
+    <nav class="side">
+      <button class="vtab active" data-page="sim"><span class="vic">📊</span><span>Stats → %</span></button>
+      <button class="vtab" data-page="inv"><span class="vic">🎯</span><span>% voulus → valeurs</span></button>
+      <button class="vtab" data-page="pal"><span class="vic">📋</span><span>Paliers CG/CCS</span></button>
+      <button class="vtab" data-page="exp"><span class="vic">🎓</span><span>Devenir Expert</span></button>
+    </nav>
+    <div class="content">
+
+  <!-- ============ PAGE 1 : SIMULATEUR ============ -->
+  <div class="page active" id="page-sim">
+    <div class="cols">
+      <!-- Col 1 : Entrées (3 encarts) -->
+      <div>
+      <div class="card">
+        <div class="lvlbox">
+          <span class="lab">⭐ Level</span>
+          <div class="lvlseg" id="lvlseg">
+            <button type="button" data-v="3" class="on">3</button>
+            <button type="button" data-v="4">4</button>
+            <button type="button" data-v="5">5</button>
+          </div>
+          <input type="hidden" id="lvl" value="3">
+        </div>
+        <div class="sect">Répartition de puissance</div>
+        <div class="statline"><label><img class="ic" data-ic="F" alt="">Force :</label><input type="number" id="stF" value="0" min="0" step="any"></div>
+        <div class="statline"><label><img class="ic" data-ic="C" alt="">Constitution :</label><input type="number" id="stC" value="0" min="0" step="any"></div>
+        <div class="statline"><label><img class="ic" data-ic="I" alt="">Intelligence :</label><input type="number" id="stI" value="0" min="0" step="any"></div>
+        <div class="statline"><label><img class="ic" data-ic="V" alt="">Vitesse :</label><input type="number" id="stV" value="0" min="0" step="any"></div>
+        <div class="statline tot"><label>Votre puissance totale :</label><input type="text" id="totRaw" value="—" disabled></div>
+      </div>
+
+      <div class="card">
+        <div class="sect sectflex">
+          <span>CG (Compétences générales)</span>
+          <span class="maxinfo">
+            <button type="button" class="infobtn" id="infoPal" title="Abaque des paliers de puissance">i</button>
+            <span class="maxlab">Max :</span>
+          </span>
+        </div>
+        <div id="palPanel">
+          <div class="palhead">Puissance atteinte → niveau max des CG &amp; CCS</div>
+          <div class="palrule">Le palier max par niveau est calculé par <b>Level²</b> (9 au lv 3, 16 au lv 4, 25 au lv 5) et <b>votre puissance vous limite dans les paliers</b>. Voir ci-dessous les paliers débloqués selon la puissance.</div>
+          <div class="palgrid" id="palGrid"></div>
+          <button type="button" class="btn" id="palClose" style="margin-top:6px;width:100%">Fermer</button>
+        </div>
+        <div class="statline"><label>Attaque des Lieux Sacrés :</label><span class="capwrap"><input type="number" id="cgAtt" value="0" min="0" step="any"><span class="capmax">/—</span></span></div>
+        <div class="statline tot"><label>Défense des Lieux Sacrés :</label><span class="capwrap"><input type="number" id="cgDef" value="0" min="0" step="any"><span class="capmax">/—</span></span></div>
+        <div class="sect">CCS (Compétences de Combat)</div>
+        <div class="statline"><label>Maîtrise des Attaques :</label><span class="capwrap"><input type="number" id="ccAP" value="0" min="0" step="any"><span class="capmax">/—</span></span></div>
+        <div class="statline"><label>Maîtrise des Défenses :</label><span class="capwrap"><input type="number" id="ccDP" value="0" min="0" step="any"><span class="capmax">/—</span></span></div>
+        <div class="statline"><label>Maîtrise des Magies :</label><span class="capwrap"><input type="number" id="ccAM" value="0" min="0" step="any"><span class="capmax">/—</span></span></div>
+        <div class="statline tot"><label>Maîtrise des Défenses Magiques :</label><span class="capwrap"><input type="number" id="ccDM" value="0" min="0" step="any"><span class="capmax">/—</span></span></div>
+      </div>
+
+      <div class="card">
+        <div class="sect">Bonus : matos, comp. innées, médailles (%)</div>
+        <div class="statline"><label><img class="ic" data-ic="F" alt="">Force :</label><span class="unitwrap"><input type="number" id="bF" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline"><label><img class="ic" data-ic="C" alt="">Constitution :</label><span class="unitwrap"><input type="number" id="bC" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline"><label><img class="ic" data-ic="I" alt="">Intelligence :</label><span class="unitwrap"><input type="number" id="bI" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline"><label><img class="ic" data-ic="V" alt="">Vitesse :</label><span class="unitwrap"><input type="number" id="bV" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline"><label>Points de vie (HP) :</label><span class="unitwrap"><input type="number" id="bHP" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline"><label>Points de Magie (MP) :</label><span class="unitwrap"><input type="number" id="bMP" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline lv45"><label>RD :</label><span class="unitwrap"><input type="number" id="bRD" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline lv45"><label>Attaque physique :</label><span class="unitwrap"><input type="number" id="bAP" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline lv45"><label>Attaque magique :</label><span class="unitwrap"><input type="number" id="bAM" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline lv45"><label>Défense physique :</label><span class="unitwrap"><input type="number" id="bDP" value="0" step="any"><span class="unit">%</span></span></div>
+        <div class="statline lv45"><label>Défense magique :</label><span class="unitwrap"><input type="number" id="bDM" value="0" step="any"><span class="unit">%</span></span></div>
+      </div>
+      </div>
+
+      <!-- Col 2 : Statistiques (format jeu) + Vie & magie + Ca -->
+      <div>
+        <div class="card">
+          <h2>📊 Statistiques</h2>
+          <div class="gwrap">
+            <table class="gstat">
+              <thead><tr><th></th><th>Brut</th><th>Avec bonus</th><th>%</th><th>% réel</th></tr></thead>
+              <tbody id="gstatBody"></tbody>
+            </table>
+            <div class="glist" id="gIndices"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>❤️ Vie &amp; magie</h2>
+          <div class="glist" id="gVie"></div>
+        </div>
+
+        <div class="card">
+          <h2 style="position:relative">📐 Abaque — que rapporte 1 point au level <span id="abLvl" style="color:var(--green)">?</span>
+            <button type="button" class="infobtn" id="infoAb" style="margin-left:auto" title="Détails du calcul">i</button>
+            <span id="abPanel">• <b>Base</b> = formule pure du niveau<br>• <b>« Avec vos bonus »</b> tient compte des bonus apportés par le stuff, compétences innées, médailles</span>
+          </h2>
+          <table class="atk">
+            <thead><tr><th>+1 point de…</th><th>Base</th><th>Avec vos bonus</th></tr></thead>
+            <tbody id="abBody"></tbody>
+          </table>
+        </div>
+
+        <div class="card lv45">
+          <h2>⛏️ Métiers (avec bonus) &amp; gains approximatifs en Ca</h2>
+          <div class="tiles">
+            <div class="tile"><div class="lab">Armurerie</div>
+              <div class="tilerow"><span class="niv">niv.</span><input type="number" id="cmArm" value="0" step="any"><div class="val" id="oArm">—</div></div></div>
+            <div class="tile"><div class="lab">Alchimie</div>
+              <div class="tilerow"><span class="niv">niv.</span><input type="number" id="cmAlc" value="0" step="any"><div class="val" id="oAlc">—</div></div></div>
+            <div class="tile"><div class="lab">Bijouterie</div>
+              <div class="tilerow"><span class="niv">niv.</span><input type="number" id="cmBij" value="0" step="any"><div class="val" id="oBij">—</div></div></div>
+          </div>
+          <div class="hint">Indique le niveau de chaque métier : le gain en Ca est calculé d'après tes stats avec bonus.</div>
+        </div>
+      </div>
+
+      <!-- Col 3 : Dégâts + spéciales -->
+      <div>
+      <div class="card">
+        <h2>💥 Dégâts moyens par attaque</h2>
+        <div class="hint" style="margin:0 0 5px">Dégât physique : <b style="color:var(--green)" id="oDgP">—</b> · dégât magique : <b style="color:var(--green)" id="oDgM">—</b> <i>(grandeur non physique, calcul intermédiaire)</i></div>
+        <table class="atk" id="tblAtk">
+          <thead><tr><th>Attaque</th><th>Niveau 3</th><th>Niveau 4</th><th>Niveau 5</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="card lv45">
+        <h2>🥋 Compétences spéciales</h2>
+        <div class="grid3">
+          <div class="field"><label>Agilité combat</label><input type="number" id="csAgi" value="0" step="any"></div>
+          <div class="field"><label>Précision atq.</label><input type="number" id="csPre" value="0" step="any"></div>
+          <div class="field"><label>Conscience mag.</label><input type="number" id="csCon" value="0" step="any"></div>
+          <div class="field"><label>Concentration mag.</label><input type="number" id="csCce" value="0" step="any"></div>
+          <div class="field"><label>Durabilité</label><input type="number" id="csDur" value="0" step="any"></div>
+          <div class="field"><label>Sagesse</label><input type="number" id="csSag" value="0" step="any"></div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PAGE 2 : INVERSE ============ -->
+  <div class="page" id="page-inv">
+    <div class="cols2">
+      <div class="card">
+        <h2>🎯 Objectif — pourcentages voulus</h2>
+        <div class="lvlbox" style="margin-bottom:10px">
+          <span class="lab">🎯 Puissance totale voulue <small style="font-weight:600;color:var(--ink2)">(somme des 4 stats)</small></span>
+          <input type="number" id="invTot" value="0" min="0" step="1" class="bigin">
+        </div>
+
+        <div class="switch" id="invMode">
+          <button class="on" data-m="base">% de base (sans bonus)</button>
+          <button data-m="real">% réels (avec bonus)</button>
+        </div>
+        <div class="hint" id="invModeHint" style="margin-bottom:8px">Les % saisis sont la répartition brute de la puissance (colonne « % » du simulateur).</div>
+
+        <div id="invBonusBox" style="display:none;margin-bottom:8px">
+          <div class="grid4">
+            <div class="field"><label><img class="ic" data-ic="F" alt="">Bonus F %</label><input type="number" id="ibF" value="0" step="any"></div>
+            <div class="field"><label><img class="ic" data-ic="C" alt="">Bonus C %</label><input type="number" id="ibC" value="0" step="any"></div>
+            <div class="field"><label><img class="ic" data-ic="I" alt="">Bonus I %</label><input type="number" id="ibI" value="0" step="any"></div>
+            <div class="field"><label><img class="ic" data-ic="V" alt="">Bonus V %</label><input type="number" id="ibV" value="0" step="any"></div>
+          </div>
+        </div>
+
+        <div class="pctrow">
+          <span class="nm"><img class="ic" data-ic="F" alt="">Force</span>
+          <input type="range" id="rF" min="0" max="100" step="1" value="0">
+          <span class="unitwrap"><input type="number" id="pF" min="0" max="100" step="1" value="0"><span class="unit">%</span></span>
+        </div>
+        <div class="pctrow">
+          <span class="nm"><img class="ic" data-ic="C" alt="">Constitution</span>
+          <input type="range" id="rC" min="0" max="100" step="1" value="0">
+          <span class="unitwrap"><input type="number" id="pC" min="0" max="100" step="1" value="0"><span class="unit">%</span></span>
+        </div>
+        <div class="pctrow">
+          <span class="nm"><img class="ic" data-ic="I" alt="">Intelligence</span>
+          <input type="range" id="rI" min="0" max="100" step="1" value="0">
+          <span class="unitwrap"><input type="number" id="pI" min="0" max="100" step="1" value="0"><span class="unit">%</span></span>
+        </div>
+        <div class="pctrow">
+          <span class="nm"><img class="ic" data-ic="V" alt="">Vitesse</span>
+          <input type="range" id="rV" min="0" max="100" step="1" value="0">
+          <span class="unitwrap"><input type="number" id="pV" min="0" max="100" step="1" value="0"><span class="unit">%</span></span>
+        </div>
+
+        <div class="sumbox bad" id="sumbox">
+          <span class="big">Somme : <span id="sumPct">0</span> %</span>
+          <span class="msg" id="summsg">La somme des 4 pourcentages doit faire exactement <u>100 %</u></span>
+          <button class="fix" id="btnNorm">→ répartir automatiquement sur 100 %</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>✨ Valeurs à viser</h2>
+        <div id="invResults">
+          <div class="result-stats">
+            <div class="rstat"><div class="nm"><img class="ic" data-ic="F" alt="">Force</div><div class="v" id="ivF">—</div><div class="p" id="ipF"></div></div>
+            <div class="rstat"><div class="nm"><img class="ic" data-ic="C" alt="">Constit.</div><div class="v" id="ivC">—</div><div class="p" id="ipC"></div></div>
+            <div class="rstat"><div class="nm"><img class="ic" data-ic="I" alt="">Intell.</div><div class="v" id="ivI">—</div><div class="p" id="ipI"></div></div>
+            <div class="rstat"><div class="nm"><img class="ic" data-ic="V" alt="">Vitesse</div><div class="v" id="ivV">—</div><div class="p" id="ipV"></div></div>
+          </div>
+          <div class="hint" style="margin-top:6px" id="invNote"></div>
+
+          <table class="atk" style="margin-top:8px">
+            <thead><tr><th>Stat</th><th>Valeur exacte</th><th>Arrondi conseillé</th><th>% obtenu</th></tr></thead>
+            <tbody id="invTbl"></tbody>
+          </table>
+          <div class="hint">Les arrondis sont choisis pour que la somme fasse exactement la puissance voulue.</div>
+          <div style="margin-top:9px">
+            <button class="btn main" id="btnSend">📥 Envoyer ces valeurs dans le simulateur</button>
+          </div>
+        </div>
+        <div id="invBlock">⚠ Ajuste les pourcentages pour atteindre exactement 100 % (et indique une puissance totale).</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============ PAGE 3 : PALIERS ============ -->
+  <div class="page" id="page-pal">
+    <div class="card" style="max-width:640px">
+      <h2>📋 Paliers CG/CCS</h2>
+      <table class="paltab">
+        <thead><tr><th></th><th>Palier</th><th>CG</th><th>CCS</th></tr></thead>
+        <tbody>
+<tr class="l3"><td class="lvg l3" rowspan="9"><span>Level 3</span></td><td class="pn">1</td><td>10</td><td>50</td></tr>
+<tr class="l3"><td class="pn">2</td><td>30</td><td>200</td></tr>
+<tr class="l3"><td class="pn">3</td><td>90</td><td>500</td></tr>
+<tr class="l3"><td class="pn">4</td><td>250</td><td>1 000</td></tr>
+<tr class="l3"><td class="pn">5</td><td>500</td><td>2 000</td></tr>
+<tr class="l3"><td class="pn">6</td><td>750</td><td>3 000</td></tr>
+<tr class="l3"><td class="pn">7</td><td>1 000</td><td>4 500</td></tr>
+<tr class="l3"><td class="pn">8</td><td>1 250</td><td>6 000</td></tr>
+<tr class="l3"><td class="pn">9</td><td>1 500</td><td>7 500</td></tr>
+<tr class="l4"><td class="lvg l4" rowspan="7"><span>Level 4</span></td><td class="pn">10</td><td>1 750</td><td>10 000</td></tr>
+<tr class="l4"><td class="pn">11</td><td>2 000</td><td>12 500</td></tr>
+<tr class="l4"><td class="pn">12</td><td>2 250</td><td>15 000</td></tr>
+<tr class="l4"><td class="pn">13</td><td>2 500</td><td>17 500</td></tr>
+<tr class="l4"><td class="pn">14</td><td>3 000</td><td>20 000</td></tr>
+<tr class="l4"><td class="pn">15</td><td>3 500</td><td>22 500</td></tr>
+<tr class="l4"><td class="pn">16</td><td>4 000</td><td>25 000</td></tr>
+<tr class="l5"><td class="lvg l5" rowspan="9"><span>Level 5</span></td><td class="pn">17</td><td>4 500</td><td>30 000</td></tr>
+<tr class="l5"><td class="pn">18</td><td>5 000</td><td>35 000</td></tr>
+<tr class="l5"><td class="pn">19</td><td>5 500</td><td>40 000</td></tr>
+<tr class="l5"><td class="pn">20</td><td>6 000</td><td>45 000</td></tr>
+<tr class="l5"><td class="pn">21</td><td>6 500</td><td>50 000</td></tr>
+<tr class="l5"><td class="pn">22</td><td>7 000</td><td>55 000</td></tr>
+<tr class="l5"><td class="pn">23</td><td>7 500</td><td>60 000</td></tr>
+<tr class="l5"><td class="pn">24</td><td>8 000</td><td>65 000</td></tr>
+<tr class="l5"><td class="pn">25</td><td>8 500</td><td>70 000</td></tr>
+        </tbody>
+      </table>
+      <div class="hint" style="margin-top:6px">Paliers 1 à 9 accessibles dès le level 3 · 10 à 16 au level 4 · 17 à 25 au level 5.</div>
+    </div>
+  </div>
+
+  <!-- ============ PAGE 4 : DEVENIR EXPERT ============ -->
+  <div class="page" id="page-exp">
+    <div class="expwrap">
+      <div class="card expnav">
+        <h2>🎓 Devenir Expert</h2>
+        <div class="hint" style="margin:0 0 7px">Toutes les formules du simulateur, expliquées pas à pas.</div>
+<button type="button" class="lnav on" data-l="0"><span class="ln">1</span>Le vocabulaire de base</button>
+<button type="button" class="lnav" data-l="1"><span class="ln">2</span>Répartition et pourcentages</button>
+<button type="button" class="lnav" data-l="2"><span class="ln">3</span>L'Attaque et l'Attaque magique</button>
+<button type="button" class="lnav" data-l="3"><span class="ln">4</span>La Défense et la Défense magique</button>
+<button type="button" class="lnav" data-l="4"><span class="ln">5</span>La RD (réduction de dégâts)</button>
+<button type="button" class="lnav" data-l="5"><span class="ln">6</span>La Vie et les points de magie</button>
+<button type="button" class="lnav" data-l="6"><span class="ln">7</span>Les dégâts par attaque</button>
+<button type="button" class="lnav" data-l="7"><span class="ln">8</span>Les métiers et les Ca <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></button>
+<button type="button" class="lnav" data-l="8"><span class="ln">9</span>Les paliers CG / CCS</button>
+      </div>
+      <div class="card expbody">
+<article class="lesson on" data-l="0"><h3><span class="ln big">1</span>Le vocabulaire de base</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span></div>
+<p>Avant tout calcul, mettons-nous d'accord sur les mots. Votre personnage possède <b>4 stats</b> : <span class="kF">Force</span>, <span class="kC">Constitution</span>, <span class="kI">Intelligence</span> et <span class="kV">Vitesse</span>.</p>
+<p>La <b>Puissance</b> est simplement leur somme :</p>
+<div class="fx">Puissance = Force + Constitution + Intelligence + Vitesse</div>
+<p>Chaque stat existe en deux versions :</p>
+<ul>
+<li><b>Brute</b> : les points que vous avez réellement investis.</li>
+<li><b>Avec bonus</b> (notée avec une apostrophe, ex. <b>F′</b>) : la stat brute gonflée par votre stuff, vos compétences innées et vos médailles.</li>
+</ul>
+<div class="fx">F′ = F × (1 + bonus Force % / 100)</div>
+<div class="ex"><b>Exemple au tableau :</b> 285 d'Intelligence avec +20 % de bonus → 285 × 1,20 = <b>342</b>.</div>
+<p class="tip">💡 Retenez bien cette notation F′, C′, I′, V′ : <u>presque toutes</u> les formules suivantes utilisent les stats <i>avec bonus</i>.</p>
+<div class="live" id="live0"></div></article>
+<article class="lesson" data-l="1"><h3><span class="ln big">2</span>Répartition et pourcentages</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span></div>
+<p>Le pourcentage d'une stat, c'est sa part dans la puissance totale. C'est une règle de trois toute simple :</p>
+<div class="fx">% de base = stat brute ÷ Puissance × 100</div>
+<p>Le <b>% réel</b> fait la même chose, mais avec les stats <i>avec bonus</i> :</p>
+<div class="fx">% réel = stat′ ÷ (F′ + C′ + I′ + V′) × 100</div>
+<div class="ex"><b>Exemple :</b> 6 de Force sur 664 de puissance → 6 ÷ 664 × 100 = <b>0,90 %</b>.</div>
+<p class="tip">💡 Pourquoi deux pourcentages ? Le % de base décrit <i>vos choix</i> de répartition ; le % réel décrit <i>ce que le jeu utilise vraiment</i> en combat. Un gros bonus sur une stat la fait « peser » plus lourd que vos points investis.</p>
+<p>L'onglet <b>% voulus → valeurs</b> fait le calcul à l'envers : à partir d'un % et d'une puissance cible, il retrouve la stat (valeur = % × puissance), puis arrondit intelligemment pour que la somme tombe juste.</p>
+<div class="live" id="live1"></div></article>
+<article class="lesson" data-l="2"><h3><span class="ln big">3</span>L'Attaque et l'Attaque magique</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span><span class="lvnote">· les termes marqués <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span> n'existent qu'à partir du level 4 (au level 3 ils valent 0)</span></div>
+<p>Les deux attaques partent de la même <b>base</b> : la Force, l'Intelligence, et la moitié de la Constitution.</p>
+<div class="fx">Base d'attaque = F′ + C′/2 + I′</div>
+<p>On multiplie ensuite cette base par trois « étages » de bonus :</p>
+<div class="fx">Att = Base × (1 + <span class="cg">CG Attaque</span>/100) × (1 + 2 × <span class="ccs">Maîtrise des Attaques</span>/100) × (1 + 2 × Précision/100 + bonus Att %/100) <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></div>
+<div class="fx">Att.M = Base × (1 + <span class="cg">CG Attaque</span>/100) × (1 + 2 × <span class="ccs">Maîtrise des Magies</span>/100) × (1 + 2 × Concentration/100 + bonus Att.M %/100) <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></div>
+<ul>
+<li>Chaque niveau de <span class="cg">CG Attaque des Lieux Sacrés</span> vaut <b>+1 %</b>.</li>
+<li>Chaque niveau de <span class="ccs">Maîtrise</span> vaut <b>+2 %</b>.</li>
+<li>Chaque niveau de Précision / Concentration vaut <b>+2 %</b>, qui s'additionne au bonus d'équipement. <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></li>
+</ul>
+<div class="ex"><b>Exemple :</b> F 6, C 5, I 285, aucun bonus → 6 + 2,5 + 285 = <b>293,5 ≈ 294</b>.</div>
+<p class="tip">💡 <b>Comment lire cette formule ?</b> Chaque parenthèse est un « étage » qui multiplie le résultat de l'étage précédent.<br>
+Exemple : base 300, <span class="cg">CG Attaque</span> niveau 10 (× 1,10) et <span class="ccs">Maîtrise des Attaques</span> niveau 5 (× 1,10) → 300 × 1,10 × 1,10 = <b>363</b>, soit +21 % au total (et non +20 % comme si on additionnait). Chaque bonus s'applique donc aussi sur les bonus des autres étages.</p>
+<div class="live" id="live2"></div></article>
+<article class="lesson" data-l="3"><h3><span class="ln big">4</span>La Défense et la Défense magique</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span><span class="lvnote">· les termes marqués <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span> n'existent qu'à partir du level 4 (au level 3 ils valent 0)</span></div>
+<p>La défense repose sur la <span class="kV">Vitesse</span> et, encore une fois, la moitié de la Constitution :</p>
+<div class="fx">Base de défense = V′ + C′/2</div>
+<div class="fx">Def = Base × (1 + 2 × <span class="cg">CG Défense</span>/100) × (1 + 3 × <span class="ccs">Maîtrise des Défenses</span>/100) × (1 + 2 × Agilité/100 + bonus Def %/100) <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></div>
+<div class="fx">Def.M = Base × (1 + 2 × <span class="cg">CG Défense</span>/100) × (1 + 3 × <span class="ccs">Maîtrise des Défenses Magiques</span>/100) × (1 + 2 × Conscience/100 + bonus Def.M %/100) <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></div>
+<p>Remarquez la différence avec l'attaque :</p>
+<ul>
+<li><span class="cg">CG Défense</span> vaut <b>+2 %</b> par niveau (contre +1 % pour l'attaque).</li>
+<li>Les <span class="ccs">Maîtrises de défense</span> valent <b>+3 %</b> par niveau (contre +2 %).</li>
+</ul>
+<div class="ex"><b>Exemple :</b> V 368, C 5 → 368 + 2,5 = <b>370,5 ≈ 371</b>.</div>
+<p class="tip">💡 Le jeu récompense donc davantage l'investissement défensif : un point de compétence en défense « rapporte » plus qu'en attaque.</p>
+<div class="live" id="live3"></div></article>
+<article class="lesson" data-l="4"><h3><span class="ln big">5</span>La RD (réduction de dégâts)</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span><span class="lvnote">· les termes marqués <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span> n'existent qu'à partir du level 4 (au level 3 ils valent 0)</span></div>
+<p>La RD dépend uniquement de la <span class="kC">Constitution avec bonus</span>, par paliers :</p>
+<div class="fx">RD = partie entière de ( (C′ − 50) / 100 + 1 ) + bonus RD <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></div>
+<p>Traduisons en français :</p>
+<ul>
+<li>Sous 50 de Constitution : <b>0</b> de RD.</li>
+<li>Dès <b>50</b> : 1 RD. Puis <b>+1 RD tous les 100</b> points : 150 → 2, 250 → 3, 350 → 4…</li>
+</ul>
+<div class="ex"><b>Exemple :</b> C′ = 249 → (249 − 50)/100 + 1 = 2,99 → partie entière <b>2</b>. À 250, on passe à 3 !</div>
+<p class="tip">💡 Astuce d'expert : quand vous êtes juste en dessous d'un seuil (149, 249…), un tout petit bonus de Constitution fait gagner un point de RD entier.</p>
+<div class="live" id="live4"></div></article>
+<article class="lesson" data-l="5"><h3><span class="ln big">6</span>La Vie et les points de magie</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span><span class="lvnote">· les termes marqués <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span> n'existent qu'à partir du level 4 (au level 3 ils valent 0)</span></div>
+<div class="hideMAJ"><p>La vie dépend du <b>level</b> (noté L). Commençons par la vie qu'on obtient après la mise à jour quotidienne, sans bonus :</p>
+<div class="fx">Vie après MAJ = F × (1 + 0,5 × (L − 3)) + C × (L − 1)</div></div>
+<p>Les points de vie (HP) dépendent du <b>level</b> (noté L). Ils appliquent vos bonus, mais sont <b>plafonnés</b> par la Vie limite :</p>
+<div class="fx">Multiplicateur Vie = 1 + bonus Vie %/100 + 2 × Durabilité/100 <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></div>
+<div class="fx">Vie limite = (0,3 × Puissance + C′ − C) × (L − 1) × Multiplicateur</div>
+<div class="fx">Vie = le plus petit entre Vie limite et (F × (1 + 0,5(L−3)) + C′ × (L − 1)) × Multiplicateur</div>
+<p>Pour la magie :</p>
+<div class="fx">MP = I′ × (2 + 0,5 × (L − 3)) × (1 + 2 × Sagesse/100 + bonus MP %/100) <span class="lvt" title="Uniquement aux levels 4 et 5"><i class="c4">4</i><i class="c5">5</i></span></div>
+<div class="ex"><b>Exemple au level 4 :</b> F 6, C 5 → 6 × 1,5 + 5 × 3 = <b>24</b> de vie. I 285 → 285 × 2,5 = <b>712,5 ≈ 713</b> MP.</div>
+<p class="tip">💡 C'est exactement ce que résume l'onglet <b>Abaque</b> : au level 4, 1 Force = 1,5 Vie, 1 Constitution = 3 Vie, 1 Intelligence = 2,5 MP. Monter de level rend chaque point plus rentable !</p>
+<div class="live" id="live5"></div></article>
+<article class="lesson" data-l="6"><h3><span class="ln big">7</span>Les dégâts par attaque</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span></div>
+<p>On calcule d'abord deux « bonus de dégâts » à partir de vos compétences :</p>
+<div class="fx">Bonus Dmg = arrondi( <span class="cg">CG Attaque</span> + 2,5 × <span class="ccs">Maîtrise des Attaques</span> )</div>
+<div class="fx">Bonus Dmg.M = arrondi( <span class="cg">CG Attaque</span> + 2,5 × <span class="ccs">Maîtrise des Magies</span> )</div>
+<p>Puis les deux dégâts de référence :</p>
+<div class="fx">Dégât physique = (F′ + I′) × (1 + Bonus Dmg/100)</div>
+<div class="fx">Dégât magique = (F′/2 + I′) × (1 + Bonus Dmg.M/100)</div>
+<p>Chaque attaque inflige enfin un <b>pourcentage fixe</b> de ce dégât de référence, selon son niveau (3, 4 ou 5).</p>
+<div class="ex"><b>Exemple :</b> dégât magique 288 → Magie I au niveau 3 (10,5 %) = 288 × 0,105 = <b>30,24</b>.</div>
+<p class="tip">💡 Le « dégât de référence » n'est pas une valeur du jeu en soi : c'est un intermédiaire de calcul. C'est pour ça que le tableau précise « grandeur non physique ».</p>
+<div class="live" id="live6"></div></article>
+<article class="lesson" data-l="7"><h3><span class="ln big">8</span>Les métiers et les Ca</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c4">4</i><i class="c5">5</i></span><span class="lvnote">· les métiers n'apparaissent qu'à partir du level 4</span></div>
+<p>Chaque métier utilise une stat avec bonus, par tranche de 150 points, puis applique <b>+25 % par niveau</b> de métier :</p>
+<div class="fx">Armurerie = arrondi( ⌈F′ / 150⌉ × (1 + 0,25 × niveau) )</div>
+<div class="fx">Alchimie = arrondi( I′ / 150 × (1 + 0,25 × niveau) )</div>
+<div class="fx">Bijouterie = arrondi( V′ / 150 × (1 + 0,25 × niveau) )</div>
+<p>Notez le petit piège : pour l'Armurerie, la tranche est arrondie <b>au-dessus</b> (⌈ ⌉) : même 1 seul point de Force compte comme une tranche complète.</p>
+<div class="ex"><b>Exemple :</b> I′ = 285, Alchimie niveau 0 → 285 / 150 = 1,9 → <b>2 Ca</b>.</div>
+<p class="tip">💡 Chaque métier est lié à une stat : Force → Armurerie, Intelligence → Alchimie, Vitesse → Bijouterie. Choisissez votre métier en accord avec votre répartition !</p>
+<div class="live" id="live7"></div></article>
+<article class="lesson" data-l="8"><h3><span class="ln big">9</span>Les paliers CG / CCS</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span></div>
+<p>Vos compétences <span class="cg">CG</span> et <span class="ccs">CCS</span> ne peuvent pas monter indéfiniment. Deux limites s'appliquent, et c'est <b>la plus basse</b> qui compte :</p>
+<div class="fx">Palier max = le plus petit entre L² et le palier débloqué par la Puissance</div>
+<ul>
+<li><b>Limite de level :</b> L² → 9 au level 3, 16 au level 4, 25 au level 5.</li>
+<li><b>Limite de puissance :</b> palier 1 dès 50, puis <b>+1 palier tous les 100</b> (150, 250, 350…), jusqu'au palier 25 à 2 450.</li>
+</ul>
+<div class="fx">Palier de puissance = partie entière de ( (Puissance + 50) / 100 )</div>
+<div class="ex"><b>Exemple :</b> level 4 et 664 de puissance → L² = 16, palier de puissance = (664 + 50)/100 = 7,14 → <b>7</b>. Le max est donc 7.</div>
+<p>Le coût de chaque palier figure dans l'onglet <b>Paliers CG/CCS</b>.</p>
+<p class="tip">🎓 Félicitations : vous connaissez désormais toutes les formules du simulateur. Vous êtes officiellement <b>Expert</b> !</p>
+<div class="live" id="live8"></div></article>
+        <div class="lfoot">
+          <button type="button" class="btn" id="lPrev">← Leçon précédente</button>
+          <span id="lCount" class="lcount"></span>
+          <button type="button" class="btn main" id="lNext">Leçon suivante →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const ICONS = {
+  F:'data:image/png;base64,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',
+  C:'data:image/png;base64,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',
+  I:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAgCAYAAADnnNMGAAACkElEQVR4Xt2WzWvUQBiHf5PMJGnMtsXGjz20WFqxIILFg549K/0HvImgR2/Fv0DEYw89K4gXEQQRL14KSj2pKOxSatFqad3ubnc33eZjJiOz6xbX1iTbDw8+uSUz75P3fWcyITenZ+SnxTV08EMCqgNUl9v3esWkFGdPn8S1qYsYP3WckEtT03K5JGA4Q61YkYihEwJNI73G3kbGHJH3Azzw8OD+dVD1xOx3kTtxpjWoslKElXNh5drS/VBZmsfd2RfQ9hMkDbM/j4Uva9CIqorce2mS0JiJIIja5UpCSgk7KCAK/LShYKaBpjEBouldY1Ml9tZH3LrCMD7spkpKVR/3Hr/Dpn2hNwkPfUxOuBjJ96VK6p4Ff2sNsLuHHmrjO6RKmEGhpxa1DaUEfZaxI+PU6VpuFHdmCkCGBWgyDWxgFODdnlSJJwaxEU0CsdjxhrtBzT8aojLMMpMyM8uwv5Lak4MgMRN3wMS5saM9eYpfa1hZb2bfJ+V6gLn3qz1JRLzziEjMREqAi72fKx0SJbZFkR9K3+nlWoANLzzcxre+5AkkZtL0ORa/N5IjZOCfLOH/R9LVEyE41LoVPAQPNjNUOxkR+a1tQKmuI5YcvFmCViuCCQbU18Hr0b4lmhAYcEzQsZEhLLxegiPLmH9yO8MHPTufl9fl1I1Z0KuXz+P5qw8IDAcv5wpyOD+YPUoK31ariKUEqZZX8PDpG/no2VuUyjUIEafN7QmiLiWpVKqy0WhAxAcnUD909hEbx1yXaHEcw/O8AxUoVJmam02EYdTORKFEW74vecQRhuGepOrtGWNgBkOfZRHHcUDIr3LthsqQc4H4t7M9iiLVM6nrGqGUtgIoCNHUXoCud/85dvgJabb4CN+LwDgAAAAASUVORK5CYII=',
+  V:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAiCAYAAABMfblJAAAElElEQVR4XpWXS2wbVRSG/3l4ZmzHbwfHdpQqaUJUyIO2lIrQCMGGl1hQiVVRlmXDFhYIsWDFDmWBiliwgQWvFRWVIiGQaJM0jkprx3m0KWlDiD1NbKdJGmLHM77oztRuxmOPJ59k2fI9c/45j3vmDrOVz8AOhXtLZOrrzwAQg/mzb4+he+QNpt6HqqrIFwr4aGkc9/eeaLB2xCjzl78BySQRL92pfZy5Odz6frypC57jMdTWZ1jn7Qpm56ZxpjeC3ogIVMraZVu7B/jhzztQ9vfAO90GVwzDQBAcGHUN4wo7CaWiaOu2IiztPiTb8jq6T4+C73+15jjgESCKArKLN4x5BjRBh0NAp7cD7z31eu0aW4LrqSm43S5I3iDI/rYhkmjYDTmdMCVKF+Th8bRh1HsSY5G3wLO8vZTK87OIBQVA9IDk7hqcx7wM7s1NmQSrUUqShHAohJdxCj3osCl46yoGwi4wvABS2jNGGJQwPZ1CRVXAcsaWoFFyHKdlh+NYuJzO1imlDZFfW0E8HtGFSo8MgmGvqDnbWPrLVMdqlFTU5XIhGAy2FsymE0QUBPhDYYBUQIq7xm5kGURDbmTnzXWsQiNlWVbr2pZNk11IIN4ugRHbQA7+q22Jw0S9DOTktYZ1PAwVbrkPNxdnMfz8WXDxIcDhAtc5bHLc4y1h6febIJUKGNY6BktBtVyCOxDGwAdfAZwTQAU4865J0AVgUBhHbiVN2nuHTGPuMJa3s7F0kxwbflG3Zxiths04fuolyOnZputVLAWz6Rl0nzz72NZasL1vEA8sGseWYH45CX9X/5MJSBp2vgbrEMEQfcZa0TRCupFFp6Snkn40mqeU0vH0EB7+s9z8rqyGd+7uHOkceOFx/eh9WfrROH76HN23lhE27VJ64dqvl9C3+h24nnNgRDeUxQlLZ8mFPPZiIzjx5oWmdk1T+iB1DXGfvkzF6mdoI2JBCZkmg7xl06ynZ9ERlHRByQeUjCOtEdR+f2cbu/Ja0/w3jLBwf4moSlkX5BxgBJfpOdgISeDg97khLzSvY0NBeT6B9oAHPMeCET2ab1LcaShSTyzAI5u6frQaZpJT2kDWENt0QRsppUT9AuTU5NEE5fkZrQGq9SPKAaC23tSUeEjC9qasnYMaqZpSup1dJbTwsRAd1gDj9IEUjecYK1ySA542J9aTjaM0CdLzS8DnhsNxaEvUHZxaEQ0IkNMzDc3MgqlJxP1czVhrGpv1qxILOJBNXrUnmE1NoSMg1ozV1QQqW2utgjIQDUgo/LuqnYfq4bNz12vFLe1sYTe/CdLVjkxuX7fN3T6SWBWeZ5G+/C2JnHiu9p+/qxfMzx+eJyuTV/Q/6eNH2w2WD237aP50X4GuXrzzxS8Ms5n5Gz++/woZ8BfRHxHsO7PJxs4BfrtdxPkvJ+CLHmNYTpAwePFz3FjbR+GRvb1ml2JZxR/LRTwz9gmcoZieO/p+SN/l0hM/kcSlj+36sk3faxcwcvFThp5Ja4L1lMtlKIpCv0m5rEBVFSiKikrF/MTXzpo8B553gOd5+gLD0N/0RYau1fM/mxmXf18T4rIAAAAASUVORK5CYII='
+};
+document.querySelectorAll('img[data-ic]').forEach(im=>{ im.src = ICONS[im.dataset.ic]; });
+
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+const fmt = (v,d=2) => isFinite(v) ? v.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:d}) : '—';
+const trunc = Math.trunc;
+
+const SIM_IDS = ['lvl','stF','stC','stI','stV','cgAtt','cgDef','ccAP','ccAM','ccDP','ccDM',
+  'bF','bC','bI','bV','bRD','bHP','bMP','bAP','bAM','bDP','bDM',
+  'csAgi','csPre','csCon','csCce','csDur','csSag','cmArm','cmAlc','cmBij'];
+const DEFAULTS = {lvl:3,stF:0,stC:0,stI:0,stV:0,cgAtt:0,cgDef:0,ccAP:0,ccAM:0,ccDP:0,ccDM:0,
+  bF:0,bC:0,bI:0,bV:0,bRD:0,bHP:0,bMP:0,bAP:0,bAM:0,bDP:0,bDM:0,
+  csAgi:0,csPre:0,csCon:0,csCce:0,csDur:0,csSag:0,cmArm:0,cmAlc:0,cmBij:0};
+
+document.querySelectorAll('.vtab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.vtab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    $('page-'+t.dataset.page).classList.add('active');
+  });
+});
+
+const STATS = [
+  {k:'F', nom:'Force'},
+  {k:'C', nom:'Constitution'},
+  {k:'I', nom:'Intelligence'},
+  {k:'V', nom:'Vitesse'},
+];
+
+const ATTAQUES = [
+  {nom:'Magie I',    base:'mag', p:[10.5,19.5,32.5]},
+  {nom:'Magie II',   base:'mag', p:[12.5,20.5,37.5]},
+  {nom:'Magie III',  base:'mag', p:[15.5,23.5,39.5]},
+  {nom:'Magie IV',   base:'mag', p:[18.5,25.5,43.5]},
+  {nom:'Physique I',   base:'phy', p:[7.5,14.5,24.5]},
+  {nom:'Physique II',  base:'phy', p:[7.5,15.5,27.5]},
+  {nom:'Physique III', base:'phy', p:[7.5,17.5,30.5]},
+  {nom:'Physique IV',  base:'phy', p:[9.5,19.5,33.5]},
+  {nom:'Physique V',   base:'phy', p:[11.5,null,null]},
+  {nom:'Physique VI',  base:'phy', p:[13.5,null,null]},
+  {nom:'Tersho bonus', base:'phy', p:[13.5,null,null]},
+];
+
+const CG_IDS=['cgAtt','cgDef','ccAP','ccAM','ccDP','ccDM'];
+function skillCap(lvl, P){
+  const palier = Math.max(0, Math.floor((P+50)/100)); // palier 1 dès 100, +1 à 150, 250… 25e à 2450
+  return Math.min(lvl*lvl, Math.min(25, palier));
+}
+function applyCap(lvl, P){
+  const cap = skillCap(lvl, P);
+  document.querySelectorAll('.capmax').forEach(e=>e.textContent='/'+cap);
+  for(const id of CG_IDS){
+    $(id).max = cap;
+    if(num(id) > cap) $(id).value = cap; // rétrogradation auto si la puissance redescend
+  }
+  // abaque des paliers
+  let cells='';
+  for(let n=1;n<=25;n++){
+    const seuil = 100*n-50;
+    const on = P >= seuil && n<=lvl*lvl;
+    cells += `<div class="palcell${on?' on':''}"><b>≥ ${seuil.toLocaleString('fr-FR')}</b>max ${n}</div>`;
+  }
+  $('palGrid').innerHTML = cells;
+  return cap;
+}
+
+function syncLvl(){
+  let lvl = Math.min(5, Math.max(3, Math.round(num('lvl'))||3));
+  $('lvl').value = lvl;
+  document.querySelectorAll('#lvlseg button').forEach(b=>b.classList.toggle('on', +b.dataset.v===lvl));
+  document.querySelectorAll('.lv45').forEach(e=>e.style.display = lvl>=4 ? '' : 'none');
+  return lvl;
+}
+document.querySelectorAll('#lvlseg button').forEach(b=>{
+  b.addEventListener('click',()=>{ $('lvl').value=b.dataset.v; compute(); });
+});
+
+/* ---------- Calculs en direct pour « Devenir Expert » ---------- */
+function renderLive(c){
+  const n=v=>fmt(v,2), r=v=>fmt(Math.round(v),0);
+  const box=(i,lines)=>{
+    const el=$('live'+i); if(!el) return;
+    el.innerHTML=`<div class="livehead">📌 Selon les stats que vous avez renseignées, le calcul est donc :</div>`+
+      lines.map(l=>`<div class="lc${l.startsWith('<span class="hideMAJ"')?' hideMAJ':''}">${l}</div>`).join('');
+  };
+  const L=c.lvl;
+  // 1 vocabulaire
+  box(0,[
+    `Puissance = ${n(c.F)} + ${n(c.C)} + ${n(c.I)} + ${n(c.V)} = <b>${n(c.tot)}</b>`,
+    `F′ = ${n(c.F)} × (1 + ${n(c.bF)}/100) = <b>${n(c.Fb)}</b> · C′ = ${n(c.C)} × (1 + ${n(c.bC)}/100) = <b>${n(c.Cb)}</b>`,
+    `I′ = ${n(c.I)} × (1 + ${n(c.bI)}/100) = <b>${n(c.Ib)}</b> · V′ = ${n(c.V)} × (1 + ${n(c.bV)}/100) = <b>${n(c.Vb)}</b>`
+  ]);
+  // 2 répartition
+  const pc=(x,t)=>t?x/t*100:0;
+  box(1,[
+    `Force : ${n(c.F)} ÷ ${n(c.tot)} × 100 = <b>${n(pc(c.F,c.tot))} %</b> · réel : ${n(c.Fb)} ÷ ${n(c.totB)} × 100 = <b>${n(pc(c.Fb,c.totB))} %</b>`,
+    `Constitution : <b>${n(pc(c.C,c.tot))} %</b> · réel <b>${n(pc(c.Cb,c.totB))} %</b> — Intelligence : <b>${n(pc(c.I,c.tot))} %</b> · réel <b>${n(pc(c.Ib,c.totB))} %</b>`,
+    `Vitesse : <b>${n(pc(c.V,c.tot))} %</b> · réel <b>${n(pc(c.Vb,c.totB))} %</b>`
+  ]);
+  // 3 attaque
+  const bA=c.Fb+c.Cb/2+c.Ib;
+  box(2,[
+    `Base = ${n(c.Fb)} + ${n(c.Cb)}/2 + ${n(c.Ib)} = <b>${n(bA)}</b>`,
+    `Att = ${n(bA)} × (1 + ${n(c.cgAtt)}/100) × (1 + 2 × ${n(c.ccAP)}/100) × (1 + 2 × ${n(c.pre)}/100 + ${n(c.bAP)}/100) = ${n(c.atqPhy)} → <b>${r(c.atqPhy)}</b>`,
+    `Att.M = ${n(bA)} × (1 + ${n(c.cgAtt)}/100) × (1 + 2 × ${n(c.ccAM)}/100) × (1 + 2 × ${n(c.cce)}/100 + ${n(c.bAM)}/100) = ${n(c.atqMag)} → <b>${r(c.atqMag)}</b>`
+  ]);
+  // 4 défense
+  const bD=c.Vb+c.Cb/2;
+  box(3,[
+    `Base = ${n(c.Vb)} + ${n(c.Cb)}/2 = <b>${n(bD)}</b>`,
+    `Def = ${n(bD)} × (1 + 2 × ${n(c.cgDef)}/100) × (1 + 3 × ${n(c.ccDP)}/100) × (1 + 2 × ${n(c.agi)}/100 + ${n(c.bDP)}/100) = ${n(c.defPhy)} → <b>${r(c.defPhy)}</b>`,
+    `Def.M = ${n(bD)} × (1 + 2 × ${n(c.cgDef)}/100) × (1 + 3 × ${n(c.ccDM)}/100) × (1 + 2 × ${n(c.con)}/100 + ${n(c.bDM)}/100) = ${n(c.defMag)} → <b>${r(c.defMag)}</b>`
+  ]);
+  // 5 RD
+  const rdIn=(c.Cb-50)/100+1;
+  box(4,[
+    `RD = partie entière de ( (${n(c.Cb)} − 50) / 100 + 1 ) + ${n(c.bRD)} = partie entière de (${n(rdIn)}) + ${n(c.bRD)} = <b>${r(c.rd)}</b>`,
+    `Prochain point de RD à C′ = <b>${n(Math.max(50, 50+100*Math.max(0,Math.trunc(rdIn))))}</b>`
+  ]);
+  // 6 vie & MP
+  const kF=1+0.5*(L-3), kC=L-1, mult=1+c.bHP/100+2*c.dur/100, kI=2+0.5*(L-3), multMP=1+2*c.sag/100+c.bMP/100;
+  box(5,[
+    `<span class="hideMAJ">Vie après MAJ = ${n(c.F)} × ${n(kF)} + ${n(c.C)} × ${n(kC)} = <b>${r(c.vieMAJ)}</b></span>`,
+    `Multiplicateur = 1 + ${n(c.bHP)}/100 + 2 × ${n(c.dur)}/100 = <b>${n(mult)}</b>`,
+    `Vie limite = (0,3 × ${n(c.tot)} + ${n(c.Cb)} − ${n(c.C)}) × ${n(kC)} × ${n(mult)} = ${n(c.vieLim)} → <b>${r(c.vieLim)}</b>`,
+    `Vie = min(${n(c.vieLim)} ; (${n(c.F)} × ${n(kF)} + ${n(c.Cb)} × ${n(kC)}) × ${n(mult)} = ${n(c.vieAlt)}) → <b>${r(c.vie)}</b>`,
+    `MP = ${n(c.Ib)} × ${n(kI)} × (1 + 2 × ${n(c.sag)}/100 + ${n(c.bMP)}/100) = ${n(c.mp)} → <b>${r(c.mp)}</b>`
+  ]);
+  // 7 dégâts
+  box(6,[
+    `Bonus Dmg = arrondi(${n(c.cgAtt)} + 2,5 × ${n(c.ccAP)}) = <b>${c.bdP}</b> % · Bonus Dmg.M = arrondi(${n(c.cgAtt)} + 2,5 × ${n(c.ccAM)}) = <b>${c.bdM}</b> %`,
+    `Dégât physique = (${n(c.Fb)} + ${n(c.Ib)}) × (1 + ${c.bdP}/100) = <b>${n(c.degPhy)}</b>`,
+    `Dégât magique = (${n(c.Fb)}/2 + ${n(c.Ib)}) × (1 + ${c.bdM}/100) = <b>${n(c.degMag)}</b>`,
+    `Ex. Magie I niveau 3 = ${n(c.degMag)} × 10,5 % = <b>${n(c.degMag*0.105)}</b> · Physique I niveau 3 = ${n(c.degPhy)} × 7,5 % = <b>${n(c.degPhy*0.075)}</b>`
+  ]);
+  // 8 métiers
+  if(c.lv45){
+    box(7,[
+      `Armurerie = arrondi( ⌈${n(c.Fb)} / 150⌉ × (1 + 0,25 × ${n(c.nArm)}) ) = arrondi(${n(Math.ceil(c.Fb/150))} × ${n(1+0.25*c.nArm)}) = <b>${c.arm}</b>`,
+      `Alchimie = arrondi( ${n(c.Ib)} / 150 × (1 + 0,25 × ${n(c.nAlc)}) ) = arrondi(${n(c.Ib/150*(1+0.25*c.nAlc))}) = <b>${c.alc}</b>`,
+      `Bijouterie = arrondi( ${n(c.Vb)} / 150 × (1 + 0,25 × ${n(c.nBij)}) ) = arrondi(${n(c.Vb/150*(1+0.25*c.nBij))}) = <b>${c.bij}</b>`
+    ]);
+  } else {
+    box(7,[`Vous êtes au level 3 : les métiers ne sont pas encore disponibles.`]);
+  }
+  // 9 paliers
+  const pal=Math.max(0,Math.min(25,Math.floor((c.tot+50)/100)));
+  box(8,[
+    `Limite de level = ${L}² = <b>${L*L}</b>`,
+    `Palier de puissance = partie entière de ( (${n(c.tot)} + 50) / 100 ) = <b>${pal}</b>`,
+    `Palier max = min(${L*L} ; ${pal}) = <b>${Math.min(L*L,pal)}</b>`
+  ]);
+}
+
+function compute(){
+  const lvl = syncLvl();
+  const F=num('stF'), C=num('stC'), I=num('stI'), V=num('stV');
+  const bF=num('bF'), bC=num('bC'), bI=num('bI'), bV=num('bV');
+  const Fb=F*(1+bF/100), Cb=C*(1+bC/100), Ib=I*(1+bI/100), Vb=V*(1+bV/100);
+  const tot=F+C+I+V, totB=Fb+Cb+Ib+Vb;
+
+  $('totRaw').value = fmt(tot);
+  applyCap(lvl, tot);
+
+  // --- Tableau Statistiques, format jeu ---
+  const raw={F,C,I,V}, bon={F:Fb,C:Cb,I:Ib,V:Vb};
+  let rows='';
+  for(const s of STATS){
+    const p = tot ? raw[s.k]/tot*100 : 0;
+    const pr = totB ? bon[s.k]/totB*100 : 0;
+    rows += `<tr>
+      <td class="nm"><img class="ic" src="${ICONS[s.k]}" alt=""> ${s.nom} :</td>
+      <td>${fmt(raw[s.k])}</td>
+      <td class="gv">${fmt(bon[s.k])}</td>
+      <td>${fmt(p)} %</td>
+      <td>${fmt(pr)} %</td>
+    </tr>`;
+  }
+  rows += `<tr class="tot">
+      <td class="nm">Puissance :</td>
+      <td>${fmt(tot)}</td>
+      <td class="gv">${fmt(totB)}</td>
+      <td>${tot?100:0} %</td><td>${totB?100:0} %</td>
+    </tr>`;
+  $('gstatBody').innerHTML = rows;
+
+  // Indices à droite (façon Att / Def / Att.M / Def.M du jeu)
+  const cgAtt=num('cgAtt'), cgDef=num('cgDef');
+  const ccAP=num('ccAP'), ccAM=num('ccAM'), ccDP=num('ccDP'), ccDM=num('ccDM');
+  const lv45 = lvl>=4; // au niveau 3 ces bonus n'existent pas
+  const bAP=lv45?num('bAP'):0, bAM=lv45?num('bAM'):0, bDP=lv45?num('bDP'):0, bDM=lv45?num('bDM'):0;
+  const bRD=lv45?num('bRD'):0, bHP=num('bHP'), bMP=num('bMP');
+  const agi=lv45?num('csAgi'):0, pre=lv45?num('csPre'):0, con=lv45?num('csCon'):0, cce=lv45?num('csCce'):0, dur=lv45?num('csDur'):0, sag=lv45?num('csSag'):0;
+
+  const atqPhy=(Fb+Cb/2+Ib)*(1+cgAtt/100)*(1+2*ccAP/100)*(1+2*pre/100+bAP/100);
+  const atqMag=(Fb+Cb/2+Ib)*(1+cgAtt/100)*(1+2*ccAM/100)*(1+2*cce/100+bAM/100);
+  const defPhy=(Vb+Cb/2)*(1+2*cgDef/100)*(1+3*ccDP/100)*(1+2*agi/100+bDP/100);
+  const defMag=(Vb+Cb/2)*(1+2*cgDef/100)*(1+3*ccDM/100)*(1+2*con/100+bDM/100);
+  const rd = trunc((Cb-50)/100+1)+bRD;
+  const bdP=Math.round(cgAtt+2.5*ccAP), bdM=Math.round(cgAtt+2.5*ccAM);
+
+  $('gIndices').innerHTML = `
+    <div class="row"><span class="lab">Att :</span><span class="v">${fmt(Math.round(atqPhy),0)}</span></div>
+    <div class="row"><span class="lab">Def :</span><span class="v">${fmt(Math.round(defPhy),0)}</span></div>
+    <div class="row"><span class="lab">Att.M :</span><span class="v">${fmt(Math.round(atqMag),0)}</span></div>
+    <div class="row"><span class="lab">Def.M :</span><span class="v">${fmt(Math.round(defMag),0)}</span></div>
+    <div class="row"><span class="lab">Bonus Dmg :</span><span class="v dim">${fmt(bdP,0)} %</span></div>
+    <div class="row"><span class="lab">Bonus Dmg.M :</span><span class="v dim">${fmt(bdM,0)} %</span></div>
+    <div class="row"><span class="lab">RD :</span><span class="v">${fmt(rd,0)}</span></div>`;
+
+  // Vie & magie
+  const vieLim = (tot/10*3+Cb-C)*(lvl-1)*(1+bHP/100+dur*2/100);
+  const vieAlt = (F*(1+0.5*(lvl-3))+Cb*(lvl-1))*(1+bHP/100+dur*2/100);
+  const vie = Math.min(vieLim, vieAlt);
+  const vieMAJ = F*(1+0.5*(lvl-3))+C*(lvl-1);
+  const mp = Ib*(2+0.5*(lvl-3))*(1+sag*2/100+bMP/100);
+  $('gVie').innerHTML = `
+    <div class="row"><span class="lab">Points de vie (HP) :</span><span class="v">${fmt(Math.round(vie),0)}</span></div>
+    <div class="row"><span class="lab">Vie limite :</span><span class="v dim">${fmt(Math.round(vieLim),0)}</span></div>
+    <div class="row hideMAJ"><span class="lab">Vie après MAJ quotidienne :</span><span class="v dim">${fmt(Math.round(vieMAJ),0)}</span></div>
+    <div class="row"><span class="lab">Points de Magie (MP) :</span><span class="v">${fmt(Math.round(mp),0)}</span></div>`;
+
+  // Abaque : apport d'1 point selon le level
+  const multHP = 1+bHP/100+dur*2/100;
+  const multMP = 1+sag*2/100+bMP/100;
+  const aF = 1+0.5*(lvl-3);            // 1 Force -> HP
+  const aC = lvl-1;                    // 1 Constitution -> HP
+  const aI = 2+0.5*(lvl-3);            // 1 Intelligence -> MP
+  $('abLvl').textContent = fmt(lvl,0);
+  $('abBody').innerHTML = `
+    <tr><td style="font-weight:600"><img class="ic" src="${ICONS.F}" alt=""> Force</td>
+        <td>+${fmt(aF)} Vie</td><td style="font-weight:700;color:var(--green)">+${fmt(aF*multHP)} Vie</td></tr>
+    <tr><td style="font-weight:600"><img class="ic" src="${ICONS.C}" alt=""> Constitution</td>
+        <td>+${fmt(aC)} Vie</td><td style="font-weight:700;color:var(--green)">+${fmt(aC*(1+bC/100)*multHP)} Vie</td></tr>
+    <tr><td style="font-weight:600"><img class="ic" src="${ICONS.I}" alt=""> Intelligence</td>
+        <td>+${fmt(aI)} MP</td><td style="font-weight:700;color:var(--green)">+${fmt(aI*(1+bI/100)*multMP)} MP</td></tr>`;
+
+  // Dégâts
+  const degPhy=(Fb+Ib)*(1+bdP/100), degMag=(Fb/2+Ib)*(1+bdM/100);
+  $('oDgP').textContent=fmt(degPhy); $('oDgM').textContent=fmt(degMag);
+
+  let arows='';
+  for(const a of ATTAQUES){
+    const base = a.base==='mag'? degMag : degPhy;
+    const cells = a.p.map(pc=>{
+      if(pc===null) return '<td style="color:#b3a98c">—</td>';
+      return `<td>${fmt(base*pc/100)}</td>`;
+    }).join('');
+    const col = a.base==='mag' ? 'var(--blue)' : 'var(--red)';
+    arows += `<tr><td style="font-weight:600;color:${col}">${a.nom}</td>${cells}</tr>`;
+  }
+  $('tblAtk').querySelector('tbody').innerHTML = arows;
+
+  // Métiers -> Ca
+  const arm=Math.round(Math.ceil(Fb/150)*(1+(lv45?num('cmArm'):0)*0.25));
+  const alc=Math.round(Ib/150*(1+(lv45?num('cmAlc'):0)*0.25));
+  const bij=Math.round(Vb/150*(1+(lv45?num('cmBij'):0)*0.25));
+  $('oArm').textContent=fmt(arm,0); $('oAlc').textContent=fmt(alc,0); $('oBij').textContent=fmt(bij,0);
+  renderLive({lvl,F,C,I,V,bF,bC,bI,bV,Fb,Cb,Ib,Vb,tot,totB,cgAtt,cgDef,ccAP,ccAM,ccDP,ccDM,
+    bAP,bAM,bDP,bDM,bRD,bHP,bMP,agi,pre,con,cce,dur,sag,atqPhy,atqMag,defPhy,defMag,rd,
+    vieLim,vieAlt,vie,vieMAJ,mp,bdP,bdM,degPhy,degMag,arm,alc,bij,lv45,
+    nArm:lv45?num('cmArm'):0, nAlc:lv45?num('cmAlc'):0, nBij:lv45?num('cmBij'):0});
+
+  save();
+}
+
+/* ---------- Mode inverse ---------- */
+let invMode='base';
+$('invMode').querySelectorAll('button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    $('invMode').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    invMode=b.dataset.m;
+    $('invBonusBox').style.display = invMode==='real'?'block':'none';
+    $('invModeHint').textContent = invMode==='real'
+      ? 'Les % saisis sont les « pourcentages réels » (avec bonus) : le calcul tient compte des bonus % pour retrouver les stats brutes.'
+      : 'Les % saisis sont la répartition brute de la puissance (colonne « % » du simulateur).';
+    computeInv();
+  });
+});
+
+const PCT_KEYS=[['F','pF','rF'],['C','pC','rC'],['I','pI','rI'],['V','pV','rV']];
+for(const [,p,r] of PCT_KEYS){
+  $(r).addEventListener('input',()=>{ $(p).value=$(r).value; computeInv(); });
+  $(p).addEventListener('input',()=>{ $(r).value=$(p).value; computeInv(); });
+}
+$('invTot').addEventListener('input',computeInv);
+['ibF','ibC','ibI','ibV'].forEach(id=>$(id).addEventListener('input',computeInv));
+$('btnNorm').addEventListener('click',()=>{
+  const vals=PCT_KEYS.map(([,p])=>Math.max(0,parseFloat($(p).value)||0));
+  const s=vals.reduce((a,b)=>a+b,0);
+  if(s<=0) return;
+  const ints=roundToTotal(vals.map(v=>v/s*100),100); // entiers, somme exacte 100
+  PCT_KEYS.forEach(([,p,r],i)=>{ $(p).value=ints[i]; $(r).value=ints[i]; });
+  computeInv();
+});
+
+function roundToTotal(exacts, total){
+  const floors = exacts.map(v=>Math.floor(v));
+  let rest = Math.round(total) - floors.reduce((a,b)=>a+b,0);
+  const order = exacts.map((v,i)=>[v-Math.floor(v),i]).sort((a,b)=>b[0]-a[0]);
+  const out = floors.slice();
+  for(let j=0;j<order.length && rest>0;j++,rest--) out[order[j][1]]++;
+  return out;
+}
+
+let lastInv=null;
+function computeInv(){
+  const tot=num('invTot');
+  const pct=PCT_KEYS.map(([,p])=>Math.max(0,parseFloat($(p).value)||0));
+  const s=pct.reduce((a,b)=>a+b,0);
+  const ok=Math.abs(s-100)<0.05;
+  const sb=$('sumbox');
+  sb.className='sumbox '+(ok?'ok':'bad');
+  $('sumPct').textContent=fmt(s,1);
+  $('summsg').innerHTML = ok
+    ? '✔ Parfait : la somme fait exactement 100 %'
+    : 'La somme des 4 pourcentages doit faire exactement <u>100 %</u> (il '+(s<100?'manque '+fmt(100-s,1):'y a '+fmt(s-100,1)+' de trop')+' %)';
+
+  const usable = ok && tot>0;
+  $('invResults').className = usable ? '' : 'off';
+  $('invBlock').style.display = usable ? 'none' : 'block';
+
+  let exacts, note='';
+  if(invMode==='base'){
+    exacts=pct.map(p=>p/100*tot);
+    note='Répartition brute : valeur = % × puissance totale.';
+  }else{
+    const bs=[num('ibF'),num('ibC'),num('ibI'),num('ibV')].map(b=>1+b/100);
+    const denom=pct.reduce((a,p,i)=>a+p/100/bs[i],0);
+    const totB=denom>0 ? tot/denom : 0;
+    exacts=pct.map((p,i)=>p/100*totB/bs[i]);
+    note=`Pour obtenir ces % réels avec les bonus saisis, le total avec bonus serait d'environ ${fmt(totB)}.`;
+  }
+  $('invNote').textContent=note;
+
+  const ints=roundToTotal(exacts,tot);
+  const keys=['F','C','I','V'];
+  const sumInt=ints.reduce((a,b)=>a+b,0);
+  let rows='';
+  keys.forEach((k,i)=>{
+    $('iv'+k).textContent = usable ? fmt(ints[i],0) : '—';
+    $('ip'+k).textContent = fmt(pct[i],1)+' % visé';
+    const pGot = sumInt? ints[i]/sumInt*100 : 0;
+    rows+=`<tr><td style="font-weight:600">${STATS[i].nom}</td><td>${fmt(exacts[i])}</td><td style="font-weight:700;color:var(--green)">${fmt(ints[i],0)}</td><td>${fmt(pGot)} %</td></tr>`;
+  });
+  rows+=`<tr><td style="font-weight:700">Total</td><td>${fmt(exacts.reduce((a,b)=>a+b,0))}</td><td style="font-weight:700;color:var(--green)">${fmt(sumInt,0)}</td><td>100 %</td></tr>`;
+  $('invTbl').innerHTML=rows;
+  lastInv = usable ? ints : null;
+  save();
+}
+
+$('btnSend').addEventListener('click',()=>{
+  if(!lastInv) return;
+  $('stF').value=lastInv[0]; $('stC').value=lastInv[1];
+  $('stI').value=lastInv[2]; $('stV').value=lastInv[3];
+  compute();
+  document.querySelector('.vtab[data-page="sim"]').click();
+});
+
+const NL = document.querySelectorAll('.lesson').length;
+let curL = 0;
+function showLesson(i){
+  curL = Math.max(0, Math.min(NL-1, i));
+  document.querySelectorAll('.lesson').forEach(e=>e.classList.toggle('on', +e.dataset.l===curL));
+  document.querySelectorAll('.lnav').forEach(e=>e.classList.toggle('on', +e.dataset.l===curL));
+  $('lCount').textContent = `Leçon ${curL+1} / ${NL}`;
+  $('lPrev').style.visibility = curL===0 ? 'hidden' : '';
+  $('lNext').style.visibility = curL===NL-1 ? 'hidden' : '';
+}
+document.querySelectorAll('.lnav').forEach(b=>b.addEventListener('click',()=>showLesson(+b.dataset.l)));
+$('lPrev').addEventListener('click',()=>showLesson(curL-1));
+$('lNext').addEventListener('click',()=>showLesson(curL+1));
+showLesson(0);
+
+$('infoPal').addEventListener('click',()=>{ $('palPanel').classList.toggle('open'); });
+$('infoCredit').addEventListener('click',e=>{ e.stopPropagation(); $('creditPanel').classList.toggle('open'); });
+$('infoAb').addEventListener('click',e=>{ e.stopPropagation(); $('abPanel').classList.toggle('open'); });
+document.addEventListener('click',e=>{
+  const ap=$('abPanel');
+  if(ap.classList.contains('open') && !ap.contains(e.target)) ap.classList.remove('open');
+});
+document.addEventListener('click',e=>{
+  const cp=$('creditPanel');
+  if(cp.classList.contains('open') && !cp.contains(e.target)) cp.classList.remove('open');
+});
+$('palClose').addEventListener('click',()=>{ $('palPanel').classList.remove('open'); });
+
+$('btn-zero').addEventListener('click',()=>{
+  $('btn-zero').style.display='none';
+  $('zeroConfirm').classList.add('open');
+});
+$('zeroYes').addEventListener('click',()=>{
+  for(const id of SIM_IDS) $(id).value = (id==='lvl')?3:0;
+  compute();
+  $('zeroConfirm').classList.remove('open');
+  $('btn-zero').style.display='';
+});
+$('zeroNo').addEventListener('click',()=>{
+  $('zeroConfirm').classList.remove('open');
+  $('btn-zero').style.display='';
+});
+
+const LS='simstats-v2';
+const A = window.AppAndroid;
+let lastPersist=0;
+window.APP = {
+  saveJson(){ try{ return localStorage.getItem(LS)||''; }catch(e){ return ''; } },
+  back(){ return false; }
+};
+function save(){
+  try{
+    const d={_t:Date.now(),_v:3};
+    for(const id of SIM_IDS) d[id]=$(id).value;
+    d._inv={tot:$('invTot').value,p:PCT_KEYS.map(([,p])=>$(p).value),mode:invMode,
+            b:['ibF','ibC','ibI','ibV'].map(id=>$(id).value)};
+    const json=JSON.stringify(d);
+    localStorage.setItem(LS,json);
+    if(A && A.persist && Date.now()-lastPersist>2500){ lastPersist=Date.now(); A.persist(json); }
+  }catch(e){}
+}
+function load(){
+  try{
+    let d=JSON.parse(localStorage.getItem(LS));
+    if(A && A.loadInternal){
+      try{
+        const d2=JSON.parse(A.loadInternal()||'null');
+        if(d2 && (!d || (d2._t||0)>(d._t||0))) d=d2;
+      }catch(e){}
+    }
+    if(!d || d._v!==3) return;
+    for(const id of SIM_IDS) if(d[id]!==undefined) $(id).value=d[id];
+    if(d._inv){
+      $('invTot').value=d._inv.tot;
+      PCT_KEYS.forEach(([,p,r],i)=>{ $(p).value=d._inv.p[i]; $(r).value=d._inv.p[i]; });
+      ['ibF','ibC','ibI','ibV'].forEach((id,i)=>$(id).value=d._inv.b[i]);
+      if(d._inv.mode==='real') $('invMode').querySelector('[data-m="real"]').click();
+    }
+  }catch(e){}
+}
+
+for(const id of SIM_IDS) $(id).addEventListener('input',compute);
+load();
+compute();
+computeInv();
+</script>
+</body>
+</html>
