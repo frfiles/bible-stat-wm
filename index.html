@@ -258,6 +258,13 @@
     font-size:10.5px;color:var(--ink);line-height:1.6;font-weight:400;white-space:normal;width:330px;text-align:left;
   }
   #abPanel.open{display:block}
+  #reachPanel{
+    display:none;position:absolute;z-index:55;right:0;top:26px;
+    background:var(--card);border:2px solid var(--accent2);border-radius:10px;
+    padding:8px 11px;box-shadow:0 8px 24px rgba(60,50,25,.3);
+    font-size:10.5px;color:var(--ink);line-height:1.55;font-weight:400;white-space:normal;width:330px;text-align:left;
+  }
+  #reachPanel.open{display:block}
   .palhead{font-size:11.5px;font-weight:800;color:#5e5b40;margin-bottom:4px}
   .palrule{font-size:10px;color:var(--ink2);line-height:1.4;margin-bottom:7px}
   .palgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
@@ -372,6 +379,21 @@
   .switch button.on{background:#fff;color:#5e5b40;box-shadow:0 1px 4px rgba(0,0,0,.14)}
 
   footer{text-align:center;color:var(--ink2);font-size:9.5px;margin-top:0}
+
+  /* Portée d'attaque */
+  .rch{position:relative;height:74px;margin:2px 6px 0}
+  .rch .axis{position:absolute;left:0;right:0;top:36px;height:2px;background:var(--line)}
+  .rch .band{position:absolute;height:14px;border-radius:7px}
+  .rch .band.atk{top:8px;background:linear-gradient(90deg,#9cc77b,#4c8a28)}
+  .rch .band.def{top:50px;background:linear-gradient(90deg,#e08a6c,#c22525)}
+  .rch .tick{position:absolute;font-size:10.5px;font-weight:800;font-variant-numeric:tabular-nums;transform:translateX(-50%);white-space:nowrap}
+  .rch .tick.a{top:-6px;color:#3d7a1f} .rch .tick.d{top:64px;color:#a12020}
+  .rch .me{position:absolute;top:0;bottom:0;width:0;border-left:2.5px solid #3a3128}
+  .rch .meLab{position:absolute;top:26px;transform:translateX(-50%);background:#3a3128;color:#fff;font-size:11px;font-weight:800;border-radius:7px;padding:1px 7px;white-space:nowrap}
+  .rchtxt{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;font-size:11px}
+  .rchtxt div{border-radius:8px;padding:4px 7px;line-height:1.35}
+  .rchtxt .a{background:#eaf4e0;color:#2f5f17} .rchtxt .d{background:#f9e3df;color:#8e1d1d}
+  .rchtxt b{font-size:12.5px}
 </style>
 </head>
 <body>
@@ -527,6 +549,15 @@
           <thead><tr><th>Attaque</th><th>Niveau 3</th><th>Niveau 4</th><th>Niveau 5</th></tr></thead>
           <tbody></tbody>
         </table>
+      </div>
+      <div class="card" id="reachCard">
+        <h2 style="position:relative">🎯 Portée d'attaque <span class="hint" style="margin-left:auto" id="reachSub"></span>
+          <button type="button" class="infobtn" id="infoReach" title="Comment est calculée la portée ?">i</button>
+          <div id="reachPanel"><b>Qui puis-je attaquer ?</b><br>De <b>Puissance ÷ Level × (Level − 1)</b> à <b>Puissance ÷ Level × (Level + 1)</b>.<br>
+            <b>Qui peut m'attaquer ?</b><br>Un adversaire du même level obéit à la même règle : il peut m'attaquer si ma puissance est dans sa propre fourchette, c'est-à-dire s'il a entre <b>Puissance × Level ÷ (Level + 1)</b> et <b>Puissance × Level ÷ (Level − 1)</b>.<br>
+            <i>Exemple : 600 au level 3 → j'attaque de 600 ÷ 3 × 2 = 400 à 600 ÷ 3 × 4 = 800 ; on peut m'attaquer de 600 × 3 ÷ 4 = 450 à 600 × 3 ÷ 2 = 900.</i><br>
+            <span style="color:var(--ink2)">Valeurs arrondies vers l'intérieur de la fourchette. Détails : Devenir Expert, leçon 13.</span></div></h2>
+        <div id="reachBox"></div>
       </div>
       <div class="card lv45">
         <h2>🥋 Compétences spéciales</h2>
@@ -692,6 +723,7 @@
 <button type="button" class="lnav" data-l="9"><span class="ln">10</span>Les combos (coups et déroulé)</button>
 <button type="button" class="lnav" data-l="10"><span class="ln">11</span>Qui commence le combat ?</button>
 <button type="button" class="lnav" data-l="11"><span class="ln">12</span>Les simulateurs en coulisses</button>
+<button type="button" class="lnav" data-l="12"><span class="ln">13</span>Qui attaquer, qui peut m'attaquer ?</button>
       </div>
       <div class="card expbody">
 <article class="lesson on" data-l="0"><h3><span class="ln big">1</span>Le vocabulaire de base</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span></div>
@@ -846,6 +878,19 @@ Exemple : base 300, <span class="cg">CG Attaque</span> niveau 10 (× 1,10) et <s
 <p class="tip">⚠️ Les indices viennent des formules du jeu, mais le <b>déroulé des combats</b> (frappes / blocages / esquives, initiative, combos, hasard des dégâts) est un <b>modèle</b> : réglable dans l'onglet « Équilibrage divers », il sert à comparer les répartitions, pas à prédire un combat au point près.</p>
 <p class="tip">🎓 Félicitations : vous connaissez toutes les formules et tous les rouages du simulateur. Vous êtes officiellement <b>Expert</b> !</p>
 <div class="live" id="live11"></div></article>
+<article class="lesson" data-l="12"><h3><span class="ln big">13</span>Qui attaquer, qui peut m'attaquer ?</h3><div class="lvline">Niveaux concernés : <span class="lvchips"><i class="c3">3</i><i class="c4">4</i><i class="c5">5</i></span></div>
+<p>On ne peut pas attaquer n'importe qui : la <b>portée d'attaque</b> dépend de votre <b>puissance</b> et de votre <b>level</b>. Plus le level est haut, plus la fourchette se resserre autour de votre puissance.</p>
+<div class="fx">Je peux attaquer de Puissance ÷ Level × (Level − 1) à Puissance ÷ Level × (Level + 1)</div>
+<p>Les autres joueurs suivent exactement la même règle. Un adversaire peut donc vous attaquer si <b>votre</b> puissance tombe dans <b>sa</b> fourchette, ce qui donne :</p>
+<div class="fx">On peut m'attaquer de Puissance × Level ÷ (Level + 1) à Puissance × Level ÷ (Level − 1)</div>
+<ul>
+<li><b>Level 3 :</b> j'attaque de ⅔ à 4⁄3 de ma puissance ; on m'attaque de ¾ à 1,5 fois ma puissance.</li>
+<li><b>Level 4 :</b> j'attaque de ¾ à 5⁄4 ; on m'attaque de 0,8 à 4⁄3 fois.</li>
+<li><b>Level 5 :</b> j'attaque de 0,8 à 1,2 ; on m'attaque de 5⁄6 à 1,25 fois.</li>
+</ul>
+<div class="ex"><b>Exemple :</b> 600 de puissance au level 3 → j'attaque de 600 ÷ 3 × 2 = <b>400</b> à 600 ÷ 3 × 4 = <b>800</b>. Un joueur de <b>900</b> peut m'attaquer, car sa fourchette va de 600 à 1 200 : on peut m'attaquer de 600 × 3 ÷ 4 = <b>450</b> à 600 × 3 ÷ 2 = <b>900</b>.</div>
+<p>Les fourchettes ne sont pas symétriques : on peut être attaqué par des joueurs <b>plus forts</b> que ceux qu'on peut soi-même attaquer vers le haut. La barre <b>🎯 Portée d'attaque</b> de l'onglet Stats → % les affiche en direct (valeurs arrondies vers l'intérieur de la fourchette).</p>
+<div class="live" id="live12"></div></article>
         <div class="lfoot">
           <button type="button" class="btn" id="lPrev">← Leçon précédente</button>
           <span id="lCount" class="lcount"></span>
@@ -1064,6 +1109,31 @@ function clampPower(lvl){
   return maxP;
 }
 
+
+/* ===== Portée d'attaque : qui je peux attaquer / qui peut m'attaquer =====
+   Je peux attaquer de P ÷ L × (L−1) à P ÷ L × (L+1).
+   Un adversaire Q (même level) peut m'attaquer si Q ÷ L × (L−1) ≤ P ≤ Q ÷ L × (L+1),
+   donc Q entre P × L ÷ (L+1) et P × L ÷ (L−1). */
+function renderReach(P, L){
+  const box=$('reachBox'), sub=$('reachSub'); if(!box) return;
+  if(!(P>0)){ box.innerHTML='<div class="hint">Renseignez la répartition de puissance pour voir la portée.</div>'; sub.textContent=''; const lv=$('live12'); if(lv) lv.innerHTML='<b>Avec vos valeurs :</b> renseignez votre répartition dans Stats → %.'; return; }
+  const aLo=Math.ceil(P/L*(L-1)-1e-9), aHi=Math.floor(P/L*(L+1)+1e-9), dLo=Math.ceil(P*L/(L+1)-1e-9), dHi=Math.floor(P*L/(L-1)+1e-9);
+  const lo=Math.min(aLo,dLo), hi=Math.max(aHi,dHi), x=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
+  sub.textContent='level '+L+' · puissance '+fmt(P);
+  const lv=$('live12'); if(lv) lv.innerHTML=`<div class="livehead">📌 Selon les stats que vous avez renseignées (level ${L}, puissance ${fmt(P)}), le calcul est donc :</div><div class="lc">Je peux attaquer de ${fmt(P)} ÷ ${L} × ${L-1} = <b>${fmt(aLo)}</b> à ${fmt(P)} ÷ ${L} × ${L+1} = <b>${fmt(aHi)}</b></div><div class="lc">On peut m'attaquer de ${fmt(P)} × ${L} ÷ ${L+1} = <b>${fmt(dLo)}</b> à ${fmt(P)} × ${L} ÷ ${L-1} = <b>${fmt(dHi)}</b></div>`;
+  box.innerHTML=`<div class="rch">
+      <div class="band atk" style="left:${x(aLo)};width:calc(${x(aHi)} - ${x(aLo)})" title="Je peux attaquer : ${fmt(aLo)} → ${fmt(aHi)}"></div>
+      <div class="tick a" style="left:${x(aLo)}">${fmt(aLo)}</div><div class="tick a" style="left:${x(aHi)}">${fmt(aHi)}</div>
+      <div class="axis"></div>
+      <div class="band def" style="left:${x(dLo)};width:calc(${x(dHi)} - ${x(dLo)})" title="Peut m'attaquer : ${fmt(dLo)} → ${fmt(dHi)}"></div>
+      <div class="tick d" style="left:${x(dLo)}">${fmt(dLo)}</div><div class="tick d" style="left:${x(dHi)}">${fmt(dHi)}</div>
+      <div class="me" style="left:${x(P)}"></div><div class="meLab" style="left:${x(P)}">${fmt(P)}</div>
+    </div>
+    <div class="rchtxt"><div class="a">⚔️ <b>Je peux attaquer</b><br>de <b>${fmt(aLo)}</b> à <b>${fmt(aHi)}</b> de puissance</div>
+      <div class="d">🛡️ <b>Peut m'attaquer</b><br>de <b>${fmt(dLo)}</b> à <b>${fmt(dHi)}</b> de puissance</div></div>
+`;
+}
+
 function compute(){
   const lvl = syncLvl();
   const maxP = clampPower(lvl);
@@ -1073,6 +1143,7 @@ function compute(){
   const tot=F+C+I+V, totB=Fb+Cb+Ib+Vb;
 
   $('totRaw').innerHTML = fmt(tot) + (tot>=maxP && tot>0 ? '<span class="maxhit">(Max!)</span>' : '');
+  renderReach(tot, lvl);
   applyCap(lvl, tot);
 
   // --- Tableau Statistiques, format jeu ---
@@ -1287,6 +1358,8 @@ $('lNext').addEventListener('click',()=>showLesson(curL+1));
 showLesson(0);
 
 $('infoPal').addEventListener('click',()=>{ $('palPanel').classList.toggle('open'); });
+$('infoReach').addEventListener('click',e=>{ e.stopPropagation(); $('reachPanel').classList.toggle('open'); });
+document.addEventListener('click',e=>{ const pnl=$('reachPanel'); if(pnl&&pnl.classList.contains('open')&&!pnl.contains(e.target)) pnl.classList.remove('open'); });
 $('infoCredit').addEventListener('click',e=>{ e.stopPropagation(); $('creditPanel').classList.toggle('open'); });
 $('infoAb').addEventListener('click',e=>{ e.stopPropagation(); $('abPanel').classList.toggle('open'); });
 document.addEventListener('click',e=>{
@@ -1358,6 +1431,7 @@ load();
 compute();
 computeInv();
 </script>
+
 
 
 
